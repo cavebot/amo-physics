@@ -1,25 +1,24 @@
-# bspci2e Package
+# BSPCI2-e Package
 
-## 20112017:
-
-### Compilation Requirements:
-- **slatec**  
-  (Expand `libslatec.tgs` and create the library using the following commands:  
+### Compilation:
+**slatec**  
+  Expand `libslatec.tgs` and create the library using the following commands:  
   `gfortran -O2 -c *.f`  
-  `ar cst libslatec.a *.o`)
+  `ar cst libslatec.a *.o`
   
-- **nag17**  
+**nag17**  
   (Expand `libnag.tgz` and create the library using:  
   `./compile`  
   `./buildlib`)
   
-- **lapack**  
-  Install via the following command:  
-  `sudo apt-get install liblapack-dev`
+**Lapack and Netcdff**  
+  Install these libraries in your terminal via the following commands:  
   
-- **netcdff**  
-  Install via the following command:  
-  `sudo apt-get install libnetcdff-dev`
+```
+$ sudo apt-get install liblapack-dev
+$ sudo apt-get install libnetcdff-dev
+$ sudo apt install libopenblas-dev ??????? IS this needed for paralellism? Ask Andrew Forembski 
+```
 
 ---
 
