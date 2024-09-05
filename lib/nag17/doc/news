@@ -1,0 +1,270 @@
+Mark 17 News  
+
+1. New Features of Mark 17
+
+   A variety of new facilities and improvements in areas of exisiting
+   coverage are the main features of Mark 17 of the NAG Fortran
+   Library. It contains a total of 1152 documented routines, of which 43
+   are new at this Mark. One new chapter has been introduced: 
+
+   F11 - Sparse Linear Algebra
+   
+   A new 3-D complex discrete Fourier transform routine is included in
+   the C06 chapter.
+
+   Coverage in the differential equations chapters has been extended 
+   with (in the stated chapters): 
+
+   - new collocation methods for the boundary value problem in ordinary
+     differential equations (D02) 
+ 
+   - an upwind scheme using a numerical flux function based on a Riemann
+     solver for first order partial differential equations in
+     conservative form in one spatial dimension (with remeshing
+     facilities and coupled differential algebraic systems)(D03) 
+ 
+   An enhanced routine for computing the minimum of a sum of squares 
+   is included in the E04 chapter.    
+ 
+   There are eight new Black Box routines, which exploit existing F08
+   routines, for computing (in the stated chapters):
+
+   - selected eigenvalues and eigenvectors of real nonsymmetric, real
+     symmetric, complex nonsymmetric and complex Hermitian linear
+     systems (F02)
+
+   - real and complex equality-constrained linear least-squares, and
+     real and complex Gauss-Markov linear models (including weighted
+     least-squares) (F04)
+
+   Ten routines are in the new chapter F11. Its current coverage
+   addresses the solution of real sparse symmetric linear systems using
+   iterative techniques. The chapter will be extended to treat 
+   nonsymmetric systems at the next Mark. It includes conjugate gradient
+   and Lanczos algorithms, incomplete Cholseky, SSOR and Jacobi 
+   preconditioning, and support routines.
+
+   Thirteen of the new routines are in the Statistics chapters. They include
+   facilities (in the stated chapters) for: 
+
+   - partial corrleations (G02)
+
+   - scaling (G03)
+
+   - analysis of variance (G04)
+
+   - multiway table analysis (G11)
+
+   - Cox's proportional hazard (G12)
+
+   - Kalman filter (G13)
+
+
+2. New Routines 
+
+   For details, please refer to the relevant chapter introductions and
+   routine documents. A concise summary of the purpose of all documented
+   routines in the Library is given in the document Contents Summary, Mark
+   17 (with the exception of routines which have been superseded). 
+ 
+   The following 43 new routines are included in the NAG Fortran Library
+   at Mark 17: 
+
+   C06FXF D02TKF D02TVF D02TXF D02TYF D02TZF D03PFF D03PLF D03PSF D03PUF
+   D03PVF E04UNF F02ECF F02FCF F02GCF F02HCF F04JLF F04JMF F04KLF F04KMF
+   F11GAF F11GBF F11GCF F11JAF F11JBF F11JCF F11JDF F11JEF F11XEF F11ZBF
+   G02BYF G03FAF G03FCF G04BCF G04DAF G04DBF G04EAF G11BAF G11BBF G11BCF
+   G12BAF G13EAF G13EBF
+
+
+3. Withdrawn Routines 
+   
+   The following routines have been withdrawn from the NAG Fortran Library
+   at Mark 17. Warning of their withdrawal was included in the Mark 16
+   Library Manual, together with advice on which routines to use instead.
+   See the document Advice on Replacement Calls for Superseded/Withdrawn
+   Routines for more detailed guidance.
+
+    Withdrawn Routine                    Recommended Replacement
+ 
+    D02QDF                               D02NBF or D02NCF
+    D02QQF                               not needed except with D02QDF
+    D03PAF                               D03PCF
+    D03PBF                               D03PCF
+    D03PGF                               D03PCF
+    E04VCF                               E04UCF
+    E04VDF                               E04UCF
+    F01AAF                               F07ADF (SGETRF/DGETRF) and
+                                         F07AJF (SGETRI/DGETRI)
+    F01BNF                               F07FRF (CPOTRF/ZPOTRF)
+    F01BPF                               F07FRF (CPOTRF/ZPOTRF) and
+                                         F07FWF (CPOTRI/ZPOTRI)
+    F01BXF                               F07FDF (SPOTRF/DPOTRF)
+    F01NAF                               F07BRF (CGBTRF/ZGBTRF)
+    F03AGF                               F07HDF (SPBTRF/DPBTRF)
+    F03AHF                               F07ARF (CGETRF/ZGETRF)
+    F03AMF                               none - see Chapter Introduction
+    F04AKF                               F07ASF (CGETRS/ZGETRS)
+    F04ALF                               F07HEF (SPBTRS/DPBTRS)
+    F04AWF                               F07FSF (CPOTRS/ZPOTRS)
+    F04AZF                               F07FEF (SPOTRS/DPOTRS)
+    F04NAF                               F07BSF (CGBTRS/ZGBTRS)
+    G04ADF                               G04BBF
+    G04AEF                               G04BBF
+    G04AFF                               G04CAF
+    G13DAF                               G13DMF
+    X02CAF                               not needed except with F01BTF and
+                                         F01BXF 
+
+
+4. Routines Scheduled for Withdrawal 
+
+   The routines listed below are scheduled for withdrawal from the NAG
+   Fortran Library, because improved routines have now been included in the
+   Library. Users are advised to stop using routines which are scheduled
+   for withdrawal immediately and to use recommended replacement routines
+   instead. See the document Advice on Replacement Calls for Superseded/
+   Withdrawn Routines for more detailed guidance, including detailed
+   advice on how to change a call to the old routine into a call to the
+   new routine. 
+ 
+   The following routines will be withdrawn at Mark 18: 
+
+    Routine Scheduled for Withdrawal   Recommended Replacement
+
+    D02BAF                             D02PCF and associated D02P routines
+    D02BBF                             D02PCF and associated D02P routines
+    D02BDF                             D02PCF and associated D02P routines
+    D02CAF                             D02CJF
+    D02CBF                             D02CJF
+    D02CGF                             D02CJF
+    D02CHF                             D02CJF
+    D02EAF                             D02EJF
+    D02EBF                             D02EJF
+    D02EGF                             D02EJF
+    D02EHF                             D02EJF
+    D02PAF                             D02PDF and associated D02P routines
+    D02XAF                             D02PXF and associated D02P routines
+    D02XBF                             D02PXF and associated D02P routines
+    D02YAF                             D02PDF and associated D02P routines
+    E04MBF                             E04MFF
+    E04NAF                             E04NFF
+    F01AEF                             F07FDF (SPOTRF/DPOTRF) and
+                                       F08SEF (SSYGST/DSYGST)
+    F01AFF                             F06YJF (STRSM/DTRSM)
+    F01AGF                             F08FEF (SSYTRD/DSYTRD)
+    F01AHF                             F08FGF (SORMTR/DORMTR)
+    F01AJF                             F08FEF (SSYTRD/DSYTRD) and
+                                       F08FFF (SORGTR/DORGTR)
+    F01AKF                             F08NEF (SGEHRD/DGEHRD)
+    F01ALF                             F08NGF (SORMHR/DORMHR)
+    F01AMF                             F08NSF (CGEHRD/ZGEHRD)
+    F01ANF                             F08NTF (CUNMHR/ZUNMHR)
+    F01APF                             F08NFF (SORGHR/DORGHR)
+    F01ATF                             F08NHF (SGEBAL/DGEBAL)
+    F01AUF                             F08NJF (SGEBAK/DGEBAK)
+    F01AVF                             F08NVF (CGEBAL/ZGEBAL)
+    F01AWF                             F08NWF (CGEBAK/ZGEBAK)
+    F01AXF                             F08BEF (SGEQRF/CGEQRF)
+    F01AYF                             F08GEF (SSPTRD/DSPTRD)
+    F01AZF                             F08GGF (SOPMTR/DOPMTR)
+    F01BCF                             F08FSF (CHETRD/ZHETRD) and
+                                       F08FTF (CUNGTR/ZUNGTR)
+    F01BDF                             F07FDF (SPOTRF/DPOTRF) and
+                                       F08SEF (SSYGST/DSYGST)
+    F01BEF                             F06YFF (STRSM/DTRSM)
+    F01BTF                             F07ADF (SGETRF/DGETRF)
+    F01BWF                             F08HEF (SSBTRD/DSBTRD)
+    F01LBF                             F07BDF (SGBTRF/DGBTRF)
+    F01QCF                             F08AEF (SGEQRF/DGEQRF)
+    F01QDF                             F08AGF (SORMQR/DORMQR)
+    F01QEF                             F08AFF (SORGQR/DORGQR)
+    F01QFF                             F08BEF (SGEQPF/DGEQPF)
+    F01RCF                             F08ASF (CGEQRF/ZGEQRF)
+    F01RDF                             F08AUF (CUNMQR/ZUNMQR)
+    F01REF                             F08ATF (CUNGQR/ZUNGQR)
+    F01RFF                             F08BSF (CGEQPF/ZGEQPF)
+    F02AAF                             F02FAF
+    F02ABF                             F02FAF
+    F02ADF                             F02FDF
+    F02AEF                             F02FDF
+    F02AFF                             F02EBF
+    F02AGF                             F02EBF
+    F02AJF                             F02GBF
+    F02AKF                             F02GBF
+    F02AMF                             F08JEF (SSTEQR/DSTEQR)
+    F02ANF                             F08PSF (CHSEQR/ZHSEQR)
+    F02APF                             F08PEF (SHSEQR/DHSEQR) and
+                                       F08QKF (STREVC/DTREVC)
+    F02AQF                             F08PEF (SHSEQR/DHSEQR) and
+                                       F08QXF (CTREVC/DTREVC)
+    F02ARF                             F08PSF (CHSEQR/ZHSEQR)
+    F02AVF                             F08JFF (SSTERF/DSTERF)
+    F02AWF                             F02HAF
+    F02AXF                             F02HAF
+    F02AYF                             F08JSF (CSTEQR/ZSTEQR)
+    F02BEF                             F08JJF (SSTEBZ/DSTEBZ) and
+                                       F08JKF (SSTEIN/DSTEIN)
+    F02BFF                             F08JJF (SSTEBZ/DSTEBZ)
+    F02BKF                             F08PKF (SHSEIN/DHSEIN)
+    F02BLF                             F08PXF (CHSEIN/ZHSEIN)
+    F02SWF                             F08KEF (SGEBRD/DGEBRD)
+    F02SXF                             F08KFF (SORGBR/DORGBR) or
+                                       F08KGF (SORMBR/DORMBR)
+    F02SYF                             F08MEF (SBDSQR/DBDSQR)
+    F02UWF                             F08KSF (CGEBRD/ZGEBRD)
+    F02UXF                             F08KTF (CUNGBR/ZUNGBR) or
+                                       F08KUF (CUNMBR/ZUNMBR)
+    F02UYF                             F08MSF (CBDSQR/ZBDSQR)
+    F04ANF                             F08AGF (SORMQR/DORMQR) and
+                                       F06PJF (STRSV/DTRSV) 
+    F04AYF                             F07AEF (SGETRS/DGETRS)
+    F04LDF                             F07BEF (SGBTRS/DGBTRS)
+    G01CEF                             G01FAF
+
+   The following routines have been superseded, but will not be withdrawn
+   from the Library until Mark 19 at the earliest. They are being retained
+   at Marks 17 and 18 because of their length of life in the Library, and
+   to give users a longer time to make the transition to the new routines. 
+
+    Superseded routine     Recommended Replacement
+ 
+    E04UPF                 E04UNF
+    F01MAF                 F11JAF
+    F02BBF                 F02FCF
+    F02BCF                 F02ECF
+    F02BDF                 F02GCF
+    F04MAF                 F11JCF
+    F04MBF                 F11GAF, F11GBF and F11GCF (or F11JCF or F11JEF)
+
+5. Routines Revised at Mark 17
+
+5.1. Optimization
+
+   Improvements to the diagnositic facilties of E04JAF and E04KAF have
+   been made.
+
+5.2 Linear Algebra
+
+   A minor correction has been made to F06ZPF (CHERK/ZHERK) and 
+   F06ZRF(CHERK2/ZHERK2).
+
+   Algorithmic improvements have been made to F08MEF(SBDSQR/DBDSQR) and
+   F08MSF(CBDSQR/ZBDSQR) to improve the efficiency of the computation
+   of singular values and to increase the relative accuracy obtained
+   for samll singular values.
+
+   F08JKF/F08JXF
+
+5.3  Statistics
+
+   The options available in G02BXF and G03AAF have been extended.
+
+   Algorithmic improvements to G02DAF have been made to improve the 
+   efficiency of the computation of leverages.
+
+   In G04BBF the computation of treatment means for non-orthogonal
+   designs has been adjusted to correspond to least-squares means.
+  
+   In G08AKF a correction has been made to the way that the required
+   probability is calculated from the computed lower tail probability.

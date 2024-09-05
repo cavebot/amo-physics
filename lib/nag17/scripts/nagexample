@@ -1,0 +1,77 @@
+#!/bin/sh
+#
+#  nagexample - copy,compile link and execute a NAG example program
+#
+#  The shell variables must be set as follows:
+#        nagfdir  :   the root directory of the NAG Library materials
+#        fcompile :   the command (with options) to execute the F77 compiler
+#        flibopts :   the $fcompile options to specify the libraries
+#                     to be linked with (including the NAG library).
+#
+#  If you have other NAG Libraries installed, similar variables may be 
+#  set e.g.
+#        nagcdir and ccompile for the NAG C Library
+#        nagedir and ecompile for the NAG Fortran Library (single precision).
+#
+nagfdir=/home/stamatis/NAG/nag17
+#nagcdir=/usr/local/lib/nagc
+fcompile="pgf77 /home/stamatis/NAG/nag17/libnag.a "
+#ccompile="cc -lnagc -lm"
+flibopts="/home/stamatis/NAG/nag17/libnag.a"
+#flibopts="-lnag_sh"     # for shared library
+#flibopts="-lblas -lnag" # for AIX BLAS
+#flibopts="-lessl -lblas -lnag_e_sh" # for ESSL and shared library
+#
+# ===========================================================================
+# ======= The Installer should not need to modify anything below this =======
+# ===========================================================================
+#
+#  The argument to this command is the name of a NAG Library routine
+#  or function. For example:
+#
+#                  nagexample e01bef
+#
+#  will copy the example program for e01bef and its data (if any) into 
+#  the current directory. The program will be compiled and linked with
+#  the NAG Library. Finally the program will be run, with the results
+#  sent to stdout.
+#
+case $1 in
+[a-z][0-9][0-9][a-z][a-z][cef])
+   lang=`echo $1 | sed -e "s/.....\(.\)/\1/"`
+   case $lang in
+      c) dir=$nagcdir ; compile=$ccompile ; libopts=$flibopts ;;
+      e) dir=$nagedir ; compile=$ecompile ; libopts=$elibopts ;;
+      f) dir=$nagfdir ; compile=$fcompile ; libopts=$clibopts ;;
+   esac
+   if test -f $dir/examples/source/$1e.$lang
+   then
+      cp $dir/examples/source/$1e.$lang .
+      if test -f $dir/examples/data/$1e.d
+      then
+         cp $dir/examples/data/$1e.d .
+      fi
+      echo Compiling $1e.$lang :
+      echo $compile $1e.$lang $libopts
+      $compile $1e.$lang $libopts
+      if test -f $1e.d
+      then
+         echo Running a.out with data from $1e.d
+         a.out < $1e.d
+      else
+         echo Running a.out
+         a.out
+      fi
+   else
+      echo There is no NAG example program for $1
+   fi
+   ;;
+*)
+   echo $0 usage : $0 NAG_name
+   echo "    Where NAG_name is the name of a NAG Fortran Library subprogram"
+   echo "                                 or NAG C Library function"
+   echo This command is used to copy a NAG library example program and its
+   echo data to you current directory. The program is compiled, linked and
+   echo run.
+   ;;
+esac

@@ -1,0 +1,10 @@
+      INTEGER FUNCTION X02BJF()
+C     MARK 12 RELEASE. NAG COPYRIGHT 1986.
+C
+C     RETURNS THE MODEL PARAMETER, p.
+C
+C     .. Executable Statements ..
+      X02BJF =    53
+C     DBL_MANT_DIG
+      RETURN
+      END

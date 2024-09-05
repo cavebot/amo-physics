@@ -1,0 +1,1676 @@
+*     F06FAF Example Program Text
+*     Mark 14 Revised.  NAG Copyright 1989.
+*     .. Parameters ..
+      INTEGER          NOUT
+      PARAMETER        (NOUT=6)
+*     .. Local Scalars ..
+      DOUBLE PRECISION EIGHT, ELEVEN, EPS, FIVE, FIVONE, FLMAX, FLMIN,
+     +                 FOUR, NINE, ONE, RTELEV, RTFIV, RTFVON, RTSEV,
+     +                 RTSIX, RTSXSV, RTSXSX, RTTEN, RTTHR, RTTHRT,
+     +                 RTTHTH, RTTWO, RTTWSX, SEVEN, SIX, SIXSEV,
+     +                 SIXSIX, STOL, TEN, THREE, THRTEN, THRTHR, TOL,
+     +                 TWO, TWOSIX, ZERO
+      INTEGER          DUM, I, K, N, NCORIX, NCORIY, NCORRR, NCORRX,
+     +                 NCORRY, NENTIX, NENTIY, NENTX, NENTY, NININT,
+     +                 NIREST, NREST
+*     .. Local Arrays ..
+      DOUBLE PRECISION ALPHA(15), BETA(15), CORRC(15,6), CORRR(15,6),
+     +                 CORRS(15,6), CORRX(15,6), CORRY(15,6),
+     +                 ENTERX(15,6), ENTERY(15,6), REST(15,6)
+      INTEGER          CORRIX(6,6), CORRIY(6,6), ENTIX(6,6), ENTIY(6,6),
+     +                 ININT(15,6), IREST(6,6)
+      CHARACTER        DIRECT(15), PIVOT(15)
+*     .. External Functions ..
+      DOUBLE PRECISION X02AJF, X02AMF
+      EXTERNAL         X02AJF, X02AMF
+*     .. External Subroutines ..
+      EXTERNAL         CHECK1, CHECK2, CHECK3, CPYROW, CPYRWI, INIT
+*     .. Intrinsic Functions ..
+      INTRINSIC        SQRT
+*     .. Executable Statements ..
+      WRITE (NOUT,99999)
+      ZERO = 0
+      ONE = 1
+      TWO = 2
+      THREE = 3
+      FOUR = 4
+      FIVE = 5
+      SIX = 6
+      SEVEN = 7
+      EIGHT = 8
+      NINE = 9
+      TEN = 10
+      ELEVEN = 11
+      THRTEN = 13
+      TWOSIX = 26
+      THRTHR = 33
+      FIVONE = 51
+      SIXSIX = 66
+      SIXSEV = 67
+      RTTWO = SQRT(TWO)
+      RTTHR = SQRT(THREE)
+      RTFIV = SQRT(FIVE)
+      RTSIX = SQRT(SIX)
+      RTSEV = SQRT(SEVEN)
+      RTTEN = SQRT(TEN)
+      RTELEV = SQRT(ELEVEN)
+      RTTHRT = SQRT(THRTEN)
+      RTTWSX = SQRT(TWOSIX)
+      RTTHTH = SQRT(THRTHR)
+      RTFVON = SQRT(FIVONE)
+      RTSXSX = SQRT(SIXSIX)
+      RTSXSV = SQRT(SIXSEV)
+      FLMIN = X02AMF()
+      FLMAX = ONE/FLMIN
+      EPS = X02AJF()
+      TOL = EPS**0.666666D+0
+      STOL = FLMIN/EPS
+      DUM = 0
+*
+*     Initialise data for (SVCOS) F06FAF tests.
+      N = 8
+      NENTX = 4
+      NENTY = 4
+      NREST = 2
+      NCORRX = 0
+      NCORRY = 0
+      NCORRR = 1
+      NININT = 4
+      ENTERX(1,1) = THREE/FIVE
+      ENTERX(1,2) = FOUR/FIVE
+      ENTERX(1,3) = -FOUR/FIVE
+      ENTERX(1,4) = TWO/FIVE
+      ENTERY(1,1) = FOUR/FIVE
+      ENTERY(1,2) = -THREE/FIVE
+      ENTERY(1,3) = -THREE/FIVE
+      ENTERY(1,4) = -ONE/FIVE
+      CALL INIT(1,4,ININT,4,0,-1,-1,DUM,DUM)
+      DO 20 I = 1, N
+         REST(I,1) = STOL
+         REST(I,2) = STOL
+   20 CONTINUE
+      CORRR(1,1) = TWO/(THREE*RTSEV)
+*
+      CALL CPYROW(ENTERX,NENTX,1,2)
+      CALL CPYROW(ENTERY,NENTY,1,2)
+      CALL INIT(2,4,ININT,4,0,1,1,DUM,DUM)
+      CORRR(2,1) = TWO/(THREE*RTSEV)
+*
+      CALL CPYROW(ENTERX,NENTX,1,3)
+      CALL CPYROW(ENTERY,NENTY,1,3)
+      CALL INIT(3,4,ININT,2,0,2,-1,DUM,DUM)
+      CORRR(3,1) = -ONE
+*
+      CALL CPYROW(ENTERX,NENTX,1,4)
+      CALL CPYROW(ENTERY,NENTY,1,4)
+      CALL INIT(4,4,ININT,2,0,-2,1,DUM,DUM)
+      CORRR(4,1) = -ONE
+*
+      CALL CPYROW(ENTERX,NENTX,1,5)
+      CALL CPYROW(ENTERY,NENTY,1,5)
+      CALL INIT(5,4,ININT,4,1,1,1,DUM,DUM)
+      CORRR(5,1) = ONE/RTFIV
+*
+      CALL CPYROW(ENTERX,NENTX,1,6)
+      CALL CPYROW(ENTERY,NENTY,1,6)
+      CALL INIT(6,4,ININT,0,0,1,1,DUM,DUM)
+      CORRR(6,1) = TWO
+*
+      CALL CPYROW(ENTERX,NENTX,1,7)
+      CALL CPYROW(ENTERY,NENTY,1,7)
+      ENTERX(7,1) = STOL/FOUR
+      CALL INIT(7,4,ININT,4,0,0,1,DUM,DUM)
+      CORRR(7,1) = TWO
+*
+      CALL CPYROW(ENTERX,NENTX,1,8)
+      CALL CPYROW(ENTERY,NENTY,1,8)
+      ENTERY(8,1) = STOL/FOUR
+      CALL INIT(8,4,ININT,4,0,1,0,DUM,DUM)
+      CORRR(8,1) = -TWO
+*
+*     Perform (SVCOS) F06FAF tests.
+      CALL CHECK1('F06FAF',N,NENTX,ENTERX,NENTY,ENTERY,NREST,REST,
+     +            NININT,ININT,NCORRX,CORRX,NCORRY,CORRY,NCORRR,CORRR,
+     +            TOL)
+*
+*     Initialise data for (SSSQ) F06FJF tests.
+      N = 5
+      NENTX = 5
+      NENTY = 0
+      NREST = 2
+      NCORRX = 0
+      NCORRY = 0
+      NCORRR = 2
+      NININT = 2
+      ENTERX(1,1) = ONE/FIVE
+      ENTERX(1,2) = TWO/FIVE
+      ENTERX(1,3) = THREE/FIVE
+      ENTERX(1,4) = -FOUR/FIVE
+      ENTERX(1,5) = ZERO
+      REST(1,1) = FIVE
+      REST(1,2) = FIVE
+      CALL INIT(1,NININT,ININT,0,1,DUM,DUM,DUM,DUM)
+      CORRR(1,1) = FIVE
+      CORRR(1,2) = FIVE
+*
+      CALL CPYROW(ENTERX,NENTX,1,2)
+      REST(2,1) = ZERO
+      REST(2,2) = ONE
+      CALL INIT(2,NININT,ININT,5,1,DUM,DUM,DUM,DUM)
+      CORRR(2,1) = FOUR/FIVE
+      CORRR(2,2) = 15/EIGHT
+*
+      CALL CPYROW(ENTERX,NENTX,1,3)
+      REST(3,1) = TWO
+      REST(3,2) = TWO
+      CALL INIT(3,NININT,ININT,3,2,DUM,DUM,DUM,DUM)
+      CORRR(3,1) = TWO
+      CORRR(3,2) = 21/TEN
+*
+      ENTERX(4,1) = FLMAX/SIX
+      ENTERX(4,2) = FLMAX/THREE
+      ENTERX(4,3) = FLMAX/TWO
+      ENTERX(4,4) = (FLMAX/THREE)*TWO
+      ENTERX(4,5) = FLMAX
+      REST(4,1) = ZERO
+      REST(4,2) = ONE
+      CALL INIT(4,NININT,ININT,5,1,DUM,DUM,DUM,DUM)
+      CORRR(4,1) = FLMAX
+      CORRR(4,2) = ELEVEN/SIX
+*
+      CALL CPYROW(ENTERX,NENTX,4,5)
+      REST(5,1) = FLMAX
+      REST(5,2) = FLMAX
+      CALL INIT(5,NININT,ININT,3,2,DUM,DUM,DUM,DUM)
+      CORRR(5,1) = FLMAX
+      CORRR(5,2) = FLMAX
+*     Perform (SSSQ) F06FJF tests.
+      CALL CHECK1('F06FJF',N,NENTX,ENTERX,NENTY,ENTERY,NREST,REST,
+     +            NININT,ININT,NCORRX,CORRX,NCORRY,CORRY,NCORRR,CORRR,
+     +            TOL)
+*
+*     Initialise data for (SLOAD) F06FBF tests.
+      N = 4
+      NENTX = 5
+      NENTY = 0
+      NREST = 1
+      NCORRX = 5
+      NCORRY = 0
+      NCORRR = 0
+      NININT = 2
+*
+      ENTERX(1,1) = ONE
+      ENTERX(1,2) = TWO
+      ENTERX(1,3) = THREE
+      ENTERX(1,4) = FOUR
+      ENTERX(1,5) = FIVE
+      REST(1,1) = ZERO
+      CALL INIT(1,NININT,ININT,0,1,DUM,DUM,DUM,DUM)
+      DO 40 K = 1, NCORRX
+         CORRX(1,K) = ENTERX(1,K)
+   40 CONTINUE
+      CALL CPYROW(CORRX,NCORRX,1,2)
+      CALL CPYROW(CORRX,NCORRX,1,3)
+      CALL CPYROW(CORRX,NCORRX,1,4)
+*
+      CALL CPYROW(ENTERX,NENTX,1,2)
+      REST(2,1) = ONE
+      CALL INIT(2,NININT,ININT,5,1,DUM,DUM,DUM,DUM)
+*
+      CALL CPYROW(ENTERX,NENTX,1,3)
+      REST(3,1) = FLMAX
+      CALL INIT(3,NININT,ININT,3,2,DUM,DUM,DUM,DUM)
+*
+      CALL CPYROW(ENTERX,NENTX,1,4)
+      REST(4,1) = -FLMIN
+      CALL INIT(4,NININT,ININT,2,3,DUM,DUM,DUM,DUM)
+*
+      DO 80 I = 1, N
+         DO 60 K = 1, ININT(I,1)*ININT(I,2), ININT(I,2)
+            CORRX(I,K) = REST(I,1)
+   60    CONTINUE
+   80 CONTINUE
+*
+*     Perform (SLOAD) F06FBF tests.
+      CALL CHECK1('F06FBF',N,NENTX,ENTERX,NENTY,ENTERY,NREST,REST,
+     +            NININT,ININT,NCORRX,CORRX,NCORRY,CORRY,NCORRR,CORRR,
+     +            TOL)
+*
+*     Initialise data for (SROTS) F06FPF tests.
+      N = 14
+      NENTX = 5
+      NENTY = 5
+      NREST = 2
+      NCORRX = 5
+      NCORRY = 5
+      NCORRR = 0
+      NININT = 3
+*
+      ENTERX(1,1) = ONE/FIVE
+      ENTERX(1,2) = TWO/FIVE
+      ENTERX(1,3) = THREE/FIVE
+      ENTERX(1,4) = FOUR/FIVE
+      ENTERX(1,5) = ONE
+      ENTERY(1,1) = -THREE/FIVE
+      ENTERY(1,2) = TWO/FIVE
+      ENTERY(1,3) = -FOUR/FIVE
+      ENTERY(1,4) = -ONE
+      ENTERY(1,5) = ONE/FIVE
+      REST(1,1) = ONE
+      REST(1,2) = ZERO
+      CALL INIT(1,NININT,ININT,5,1,-1,DUM,DUM,DUM)
+      DO 100 K = 1, NCORRX
+         CORRX(1,K) = ENTERX(1,K)
+  100 CONTINUE
+      DO 120 K = 1, NCORRY
+         CORRY(1,K) = ENTERY(1,K)
+  120 CONTINUE
+*
+      CALL CPYROW(ENTERX,NENTX,1,2)
+      CALL CPYROW(ENTERY,NENTY,1,2)
+      REST(2,1) = ZERO
+      REST(2,2) = ONE
+      CALL INIT(2,NININT,ININT,5,1,1,DUM,DUM,DUM)
+      DO 140 K = 1, NCORRX
+         CORRX(2,K) = ENTERY(2,K)
+  140 CONTINUE
+      DO 160 K = 1, NCORRY
+         CORRY(2,K) = ENTERX(2,K)
+  160 CONTINUE
+*
+      CALL CPYROW(ENTERX,NENTX,1,3)
+      CALL CPYROW(ENTERY,NENTY,1,3)
+      REST(3,1) = ONE/TWO
+      REST(3,2) = RTTHR/TWO
+      CALL INIT(3,NININT,ININT,2,-2,-3,DUM,DUM,DUM)
+      CALL CPYROW(CORRX,NCORRX,1,3)
+      CORRX(3,1) = (ONE-THREE*RTTHR)/TEN
+      CORRX(3,3) = (THREE-FIVE*RTTHR)/TEN
+      CALL CPYROW(CORRY,NCORRY,1,3)
+      CORRY(3,1) = (THREE+RTTHR)/TEN
+      CORRY(3,4) = (FIVE+THREE*RTTHR)/TEN
+*
+      CALL CPYROW(ENTERX,NENTX,1,4)
+      CALL CPYROW(ENTERY,NENTY,1,4)
+      REST(4,1) = ONE/RTTWO
+      REST(4,2) = ONE/RTTWO
+      CALL INIT(4,NININT,ININT,3,1,2,DUM,DUM,DUM)
+      CALL CPYROW(CORRX,NCORRX,1,4)
+      CORRX(4,1) = -RTTWO/FIVE
+      CORRX(4,2) = -RTTWO/FIVE
+      CORRX(4,3) = TWO*RTTWO/FIVE
+      CALL CPYROW(CORRY,NCORRY,1,4)
+      CORRY(4,1) = TWO*RTTWO/FIVE
+      CORRY(4,3) = THREE*RTTWO/FIVE
+      CORRY(4,5) = RTTWO/FIVE
+*
+      CALL CPYROW(ENTERX,NENTX,1,5)
+      CALL CPYROW(ENTERY,NENTY,1,5)
+      REST(5,1) = ONE/RTTWO
+      REST(5,2) = ONE/RTTWO
+      CALL INIT(5,NININT,ININT,3,-1,2,DUM,DUM,DUM)
+      CALL CPYROW(CORRX,NCORRX,1,5)
+      CORRX(5,1) = RTTWO/FIVE
+      CORRX(5,2) = -RTTWO/FIVE
+      CORRX(5,3) = ZERO
+      CALL CPYROW(CORRY,NCORRY,1,5)
+      CORRY(5,1) = THREE*RTTWO/FIVE
+      CORRY(5,3) = THREE*RTTWO/FIVE
+      CORRY(5,5) = ZERO
+*
+      CALL CPYROW(ENTERX,NENTX,1,6)
+      CALL CPYROW(ENTERY,NENTY,1,6)
+      REST(6,1) = ZERO
+      REST(6,2) = ONE
+      CALL INIT(6,NININT,ININT,2,1,2,DUM,DUM,DUM)
+      CALL CPYROW(CORRX,NCORRX,1,6)
+      CALL CPYROW(CORRY,NCORRY,1,6)
+      CORRX(6,1) = ENTERY(6,1)
+      CORRX(6,2) = ENTERY(6,3)
+      CORRY(6,1) = ENTERX(6,1)
+      CORRY(6,3) = ENTERX(6,2)
+*
+      CALL CPYROW(ENTERX,NENTX,1,7)
+      CALL CPYROW(ENTERY,NENTY,1,7)
+      REST(7,1) = ZERO
+      REST(7,2) = ONE
+      CALL INIT(7,NININT,ININT,5,1,-1,DUM,DUM,DUM)
+      DO 180 I = 1, NENTX
+         CORRX(7,I) = ENTERY(7,NENTX+1-I)
+  180 CONTINUE
+      DO 200 I = 1, NENTY
+         CORRY(7,I) = ENTERX(7,NENTX+1-I)
+  200 CONTINUE
+*
+      CALL CPYROW(ENTERX,NENTX,1,8)
+      CALL CPYROW(ENTERY,NENTY,1,8)
+      REST(8,1) = ZERO
+      REST(8,2) = ONE
+      CALL INIT(8,NININT,ININT,5,-1,1,DUM,DUM,DUM)
+      CALL CPYROW(CORRX,NCORRX,7,8)
+      CALL CPYROW(CORRY,NCORRY,7,8)
+*
+      CALL CPYROW(ENTERX,NENTX,1,9)
+      CALL CPYROW(ENTERY,NENTY,1,9)
+      REST(9,1) = ZERO
+      REST(9,2) = ONE
+      CALL INIT(9,NININT,ININT,5,-1,-1,DUM,DUM,DUM)
+      CALL CPYROW(CORRX,NCORRX,2,9)
+      CALL CPYROW(CORRY,NCORRY,2,9)
+*
+      CALL CPYROW(ENTERX,NENTX,1,10)
+      CALL CPYROW(ENTERY,NENTY,1,10)
+      REST(10,1) = ZERO
+      REST(10,2) = -ONE
+      CALL INIT(10,NININT,ININT,2,1,2,DUM,DUM,DUM)
+      CALL CPYROW(CORRX,NCORRX,1,10)
+      CALL CPYROW(CORRY,NCORRY,1,10)
+      CORRX(10,1) = -ENTERY(10,1)
+      CORRX(10,2) = -ENTERY(10,3)
+      CORRY(10,1) = -ENTERX(10,1)
+      CORRY(10,3) = -ENTERX(10,2)
+*
+      CALL CPYROW(ENTERX,NENTX,1,11)
+      CALL CPYROW(ENTERY,NENTY,1,11)
+      REST(11,1) = ZERO
+      REST(11,2) = -ONE
+      CALL INIT(11,NININT,ININT,5,1,-1,DUM,DUM,DUM)
+      DO 220 I = 1, NENTX
+         CORRX(11,I) = -ENTERY(11,NENTX+1-I)
+  220 CONTINUE
+      DO 240 I = 1, NENTY
+         CORRY(11,I) = -ENTERX(11,NENTX+1-I)
+  240 CONTINUE
+*
+      CALL CPYROW(ENTERX,NENTX,1,12)
+      CALL CPYROW(ENTERY,NENTY,1,12)
+      REST(12,1) = ZERO
+      REST(12,2) = -ONE
+      CALL INIT(12,NININT,ININT,5,-1,1,DUM,DUM,DUM)
+      CALL CPYROW(CORRX,NCORRX,11,12)
+      CALL CPYROW(CORRY,NCORRY,11,12)
+*
+      CALL CPYROW(ENTERX,NENTX,1,13)
+      CALL CPYROW(ENTERY,NENTY,1,13)
+      REST(13,1) = ZERO
+      REST(13,2) = -ONE
+      CALL INIT(13,NININT,ININT,5,-1,-1,DUM,DUM,DUM)
+      DO 260 K = 1, NCORRX
+         CORRX(13,K) = -ENTERY(13,K)
+  260 CONTINUE
+      DO 280 K = 1, NCORRY
+         CORRY(13,K) = -ENTERX(13,K)
+  280 CONTINUE
+*
+      CALL CPYROW(ENTERX,NENTX,1,14)
+      CALL CPYROW(ENTERY,NENTY,1,14)
+      REST(14,1) = ONE/RTTWO
+      REST(14,2) = ONE/RTTWO
+      CALL INIT(14,NININT,ININT,5,1,1,DUM,DUM,DUM)
+      DO 300 K = 1, NCORRX
+         CORRX(14,K) = (ENTERX(14,K)+ENTERY(14,K))/RTTWO
+  300 CONTINUE
+      DO 320 K = 1, NCORRY
+         CORRY(14,K) = (ENTERX(14,K)-ENTERY(14,K))/RTTWO
+  320 CONTINUE
+*
+*     Perform (SROTS) F06FPF tests.
+      CALL CHECK1('F06FPF',N,NENTX,ENTERX,NENTY,ENTERY,NREST,REST,
+     +            NININT,ININT,NCORRX,CORRX,NCORRY,CORRY,NCORRR,CORRR,
+     +            TOL)
+*
+*     Initialise data for (SDSCL) F06FCF tests.
+      N = 6
+      NENTX = 5
+      NENTY = 5
+      NREST = 0
+      NCORRX = 5
+      NCORRY = 0
+      NCORRR = 0
+      NININT = 3
+*
+      ENTERX(1,1) = ONE/EIGHT
+      ENTERX(1,2) = TWO/EIGHT
+      ENTERX(1,3) = -THREE/EIGHT
+      ENTERX(1,4) = FOUR/EIGHT
+      ENTERX(1,5) = FIVE/EIGHT
+      ENTERY(1,1) = -ONE/FIVE
+      ENTERY(1,2) = THREE/FIVE
+      ENTERY(1,3) = FOUR/FIVE
+      ENTERY(1,4) = -TWO/FIVE
+      ENTERY(1,5) = -ONE
+      CALL INIT(1,NININT,ININT,5,-1,1,DUM,DUM,DUM)
+      CORRX(1,1) = -ONE/EIGHT
+      CORRX(1,2) = -ONE/TEN
+      CORRX(1,3) = -THREE/TEN
+      CORRX(1,4) = THREE/TEN
+      CORRX(1,5) = -ONE/EIGHT
+*
+      CALL CPYROW(ENTERX,NENTX,1,2)
+      CALL CPYROW(ENTERY,NENTY,1,2)
+      CALL INIT(2,NININT,ININT,3,2,-2,DUM,DUM,DUM)
+      CORRX(2,1) = -ONE/EIGHT
+      CORRX(2,2) = ONE/FOUR
+      CORRX(2,3) = -THREE/TEN
+      CORRX(2,4) = ONE/TWO
+      CORRX(2,5) = -ONE/EIGHT
+*
+      CALL CPYROW(ENTERX,NENTX,1,3)
+      CALL CPYROW(ENTERY,NENTY,1,3)
+      CALL INIT(3,NININT,ININT,2,2,2,DUM,DUM,DUM)
+      CORRX(3,1) = -ONE/40
+      CORRX(3,2) = ONE/FOUR
+      CORRX(3,3) = -THREE/TEN
+      CORRX(3,4) = ONE/TWO
+      CORRX(3,5) = FIVE/EIGHT
+*
+      CALL CPYROW(ENTERX,NENTX,1,4)
+      CALL CPYROW(ENTERY,NENTY,1,4)
+      CALL INIT(4,NININT,ININT,5,-1,-1,DUM,DUM,DUM)
+      CORRX(4,1) = -ONE/40
+      CORRX(4,2) = THREE/20
+      CORRX(4,3) = -THREE/TEN
+      CORRX(4,4) = -ONE/FIVE
+      CORRX(4,5) = -FIVE/EIGHT
+*
+      CALL CPYROW(ENTERX,NENTX,1,5)
+      CALL CPYROW(ENTERY,NENTY,1,5)
+      CALL INIT(5,NININT,ININT,3,-1,0,DUM,DUM,DUM)
+      CORRX(5,1) = -THREE/250
+      CORRX(5,2) = ONE/FOUR
+      CORRX(5,3) = -THREE/EIGHT
+      CORRX(5,4) = ONE/TWO
+      CORRX(5,5) = FIVE/EIGHT
+*
+      CALL CPYROW(ENTERX,NENTX,1,6)
+      CALL CPYROW(ENTERY,NENTY,1,6)
+      CALL INIT(6,NININT,ININT,3,0,-1,DUM,DUM,DUM)
+      CORRX(6,1) = -ONE/40
+      CORRX(6,2) = -ONE/20
+      CORRX(6,3) = THREE/40
+      CORRX(6,4) = ONE/TWO
+      CORRX(6,5) = FIVE/EIGHT
+*
+*     Perform (SDSCL) F06FCF tests.
+      CALL CHECK1('F06FCF',N,NENTX,ENTERX,NENTY,ENTERY,NREST,REST,
+     +            NININT,ININT,NCORRX,CORRX,NCORRY,CORRY,NCORRR,CORRR,
+     +            TOL)
+*
+*     Initialise data for (SNEGV) F06FGF tests.
+      N = 1
+      NENTX = 5
+      NENTY = 0
+      NREST = 0
+      NCORRX = 5
+      NCORRY = 0
+      NCORRR = 0
+      NININT = 2
+*
+      ENTERX(1,1) = ONE
+      ENTERX(1,2) = TWO
+      ENTERX(1,3) = -THREE
+      ENTERX(1,4) = FOUR
+      ENTERX(1,5) = FIVE
+      CALL INIT(1,NININT,ININT,3,2,DUM,DUM,DUM,DUM)
+      CORRX(1,1) = -ONE
+      CORRX(1,2) = TWO
+      CORRX(1,3) = THREE
+      CORRX(1,4) = FOUR
+      CORRX(1,5) = -FIVE
+*
+*     Perform (SNEGV) F06FGF tests.
+      CALL CHECK1('F06FGF',N,NENTX,ENTERX,NENTY,ENTERY,NREST,REST,
+     +            NININT,ININT,NCORRX,CORRX,NCORRY,CORRY,NCORRR,CORRR,
+     +            TOL)
+*
+*     Initialise data for (SREFG) F06FSF tests.
+      N = 8
+      NENTX = 5
+      NENTY = 0
+      NREST = 2
+      NCORRX = 5
+      NCORRY = 0
+      NCORRR = 3
+      NININT = 2
+      ENTERX(1,1) = THREE/FIVE
+      ENTERX(1,2) = TWO/FIVE
+      ENTERX(1,3) = -FOUR/FIVE
+      ENTERX(1,4) = ONE
+      ENTERX(1,5) = -ONE/FIVE
+      REST(1,1) = -FOUR/FIVE
+      REST(1,2) = STOL
+      CALL INIT(1,NININT,ININT,1,1,DUM,DUM,DUM,DUM)
+      DO 340 K = 1, NCORRX
+         CORRX(1,K) = ENTERX(1,K)
+  340 CONTINUE
+      CALL CPYROW(CORRX,NCORRX,1,2)
+      CALL CPYROW(CORRX,NCORRX,1,3)
+      CALL CPYROW(CORRX,NCORRX,1,4)
+      CALL CPYROW(CORRX,NCORRX,1,5)
+      CALL CPYROW(CORRX,NCORRX,1,6)
+      CALL CPYROW(CORRX,NCORRX,1,7)
+      CALL CPYROW(CORRX,NCORRX,1,8)
+      CORRX(1,1) = -THREE/FIVE
+      CORRR(1,1) = ONE
+      CORRR(1,2) = STOL
+      CORRR(1,3) = NINE/FIVE
+*
+      CALL CPYROW(ENTERX,NENTX,1,2)
+      REST(2,1) = ONE/FIVE
+      REST(2,2) = STOL
+      CALL INIT(2,NININT,ININT,2,3,DUM,DUM,DUM,DUM)
+      CORRX(2,1) = THREE/(RTFIV*RTSEV)
+      CORRX(2,4) = RTFIV/RTSEV
+      CORRR(2,1) = -RTSEV/RTFIV
+      CORRR(2,2) = STOL
+      CORRR(2,3) = ONE + ONE/(RTFIV*RTSEV)
+*
+      CALL CPYROW(ENTERX,NENTX,1,3)
+      REST(3,1) = -THREE/FIVE
+      REST(3,2) = STOL
+      CALL INIT(3,NININT,ININT,5,1,DUM,DUM,DUM,DUM)
+      CORRX(3,1) = -THREE/EIGHT
+      CORRX(3,2) = -ONE/FOUR
+      CORRX(3,3) = ONE/TWO
+      CORRX(3,4) = -FIVE/EIGHT
+      CORRX(3,5) = ONE/EIGHT
+      CORRR(3,1) = EIGHT/FIVE
+      CORRR(3,2) = STOL
+      CORRR(3,3) = ELEVEN/EIGHT
+*
+      CALL CPYROW(ENTERX,NENTX,1,4)
+      REST(4,1) = SEVEN/FIVE
+      REST(4,2) = STOL
+      CALL INIT(4,NININT,ININT,3,2,DUM,DUM,DUM,DUM)
+      CORRX(4,1) = RTTHR/FIVE
+      CORRX(4,3) = -FOUR/(FIVE*RTTHR)
+      CORRX(4,5) = -ONE/(FIVE*RTTHR)
+      CORRR(4,1) = -RTTHR
+      CORRR(4,2) = STOL
+      CORRR(4,3) = ONE + SEVEN/(FIVE*RTTHR)
+*
+      CALL CPYROW(ENTERX,NENTX,1,5)
+      REST(5,1) = SEVEN/FIVE
+      REST(5,2) = STOL
+      CALL INIT(5,NININT,ININT,0,1,DUM,DUM,DUM,DUM)
+      CORRR(5,1) = SEVEN/FIVE
+      CORRR(5,2) = STOL
+      CORRR(5,3) = ZERO
+*
+      CALL CPYROW(ENTERX,NENTX,1,6)
+      REST(6,1) = SEVEN/FIVE
+      REST(6,2) = -ONE
+      CALL INIT(6,NININT,ININT,3,2,DUM,DUM,DUM,DUM)
+      CORRX(6,1) = RTTHR/FIVE
+      CORRX(6,3) = -FOUR/(FIVE*RTTHR)
+      CORRX(6,5) = -ONE/(FIVE*RTTHR)
+      CORRR(6,1) = -RTTHR
+      CORRR(6,2) = -ONE
+      CORRR(6,3) = ONE + SEVEN/(FIVE*RTTHR)
+*
+      CALL CPYROW(ENTERX,NENTX,1,7)
+      REST(7,1) = ZERO
+      REST(7,2) = STOL
+      CALL INIT(7,NININT,ININT,5,1,DUM,DUM,DUM,DUM)
+      CORRX(7,1) = THREE/(RTFIV*RTELEV)
+      CORRX(7,2) = TWO/(RTFIV*RTELEV)
+      CORRX(7,3) = -FOUR/(RTFIV*RTELEV)
+      CORRX(7,4) = RTFIV/RTELEV
+      CORRX(7,5) = -ONE/(RTFIV*RTELEV)
+      CORRR(7,1) = -RTELEV/RTFIV
+      CORRR(7,2) = STOL
+      CORRR(7,3) = ONE
+*
+      DO 360 I = 1, NENTX
+         ENTERX(8,I) = ZERO
+         CORRX(8,I) = ZERO
+  360 CONTINUE
+      REST(8,1) = SEVEN/FIVE
+      REST(8,2) = STOL
+      CALL INIT(8,NININT,ININT,5,1,DUM,DUM,DUM,DUM)
+      CORRR(8,1) = SEVEN/FIVE
+      CORRR(8,2) = STOL
+      CORRR(8,3) = ZERO
+*
+*     Perform (SREFG) F06FSF tests.
+      CALL CHECK1('F06FSF',N,NENTX,ENTERX,NENTY,ENTERY,NREST,REST,
+     +            NININT,ININT,NCORRX,CORRX,NCORRY,CORRY,NCORRR,CORRR,
+     +            TOL)
+*
+*     Initialise data for (SGRF) F06FTF tests.
+      N = 4
+      NENTX = 5
+      NENTY = 5
+      NREST = 2
+      NCORRX = 5
+      NCORRY = 0
+      NCORRR = 1
+      NININT = 3
+      ENTERX(1,1) = THREE
+      ENTERX(1,2) = -TWO
+      ENTERX(1,3) = FOUR
+      ENTERX(1,4) = -ONE
+      ENTERX(1,5) = THREE
+      ENTERY(1,1) = -ONE/THREE
+      ENTERY(1,2) = -THREE/TWO
+      ENTERY(1,3) = THREE/FOUR
+      ENTERY(1,4) = FIVE
+      ENTERY(1,5) = ONE
+      REST(1,1) = THREE
+      REST(1,2) = ONE
+      CALL INIT(1,NININT,ININT,5,1,1,DUM,DUM,DUM)
+      CORRX(1,1) = FIVE
+      CORRX(1,2) = SEVEN
+      CORRX(1,3) = -ONE/TWO
+      CORRX(1,4) = -31
+      CORRX(1,5) = -THREE
+      CORRR(1,1) = -THREE
+*
+      CALL CPYROW(ENTERX,NENTX,1,2)
+      CALL CPYROW(ENTERY,NENTY,1,2)
+      REST(2,1) = FLMIN
+      REST(2,2) = RTTWO
+      CALL INIT(2,NININT,ININT,5,-1,-1,DUM,DUM,DUM)
+      CORRX(2,1) = FOUR
+      CORRX(2,2) = FIVE/TWO
+      CORRX(2,3) = SEVEN/FOUR
+      CORRX(2,4) = -16
+      CORRX(2,5) = ZERO
+      CORRR(2,1) = -THREE*RTTWO
+*
+      CALL CPYROW(ENTERX,NENTX,1,3)
+      CALL CPYROW(ENTERY,NENTY,1,3)
+      REST(3,1) = -TWO
+      REST(3,2) = FOUR/THREE
+      CALL INIT(3,NININT,ININT,3,-2,1,DUM,DUM,DUM)
+      CORRX(3,1) = 137/(TWO*EIGHT)
+      CORRX(3,2) = ENTERX(3,2)
+      CORRX(3,3) = -57/EIGHT
+      CORRX(3,4) = ENTERX(3,4)
+      CORRX(3,5) = 19/(SIX*TWO*THREE)
+      CORRR(3,1) = 71/NINE
+*
+      CALL CPYROW(ENTERX,NENTX,1,4)
+      CALL CPYROW(ENTERY,NENTY,1,4)
+      REST(4,1) = ZERO
+      REST(4,2) = FIVE/FOUR
+      CALL INIT(4,NININT,ININT,2,1,-3,DUM,DUM,DUM)
+      CORRX(4,1) = -226/THREE
+      CORRX(4,2) = 29/NINE
+      CORRX(4,3) = ENTERX(4,3)
+      CORRX(4,4) = ENTERX(4,4)
+      CORRX(4,5) = ENTERX(4,5)
+      CORRR(4,1) = -235/(SIX*TWO)
+*
+*     Perform (SGRF) F06FTF tests.
+      CALL CHECK1('F06FTF',N,NENTX,ENTERX,NENTY,ENTERY,NREST,REST,
+     +            NININT,ININT,NCORRX,CORRX,NCORRY,CORRY,NCORRR,CORRR,
+     +            TOL)
+*
+*     Initialise data for (SREF) F06FUF tests.
+      N = 2
+      NENTX = 5
+      NENTY = 5
+      NREST = 2
+      NCORRX = 0
+      NCORRY = 5
+      NCORRR = 2
+      NININT = 3
+      ENTERX(1,1) = -THREE/EIGHT
+      ENTERX(1,2) = -ONE/FOUR
+      ENTERX(1,3) = ONE/TWO
+      ENTERX(1,4) = -FIVE/EIGHT
+      ENTERX(1,5) = ONE/EIGHT
+      ENTERY(1,1) = THREE/FIVE
+      ENTERY(1,2) = TWO/FIVE
+      ENTERY(1,3) = -FOUR/FIVE
+      ENTERY(1,4) = ONE
+      ENTERY(1,5) = -ONE/FIVE
+      REST(1,1) = ELEVEN/EIGHT
+      REST(1,2) = -THREE/FIVE
+      CALL INIT(1,NININT,ININT,5,1,1,DUM,DUM,DUM)
+      DO 380 K = 1, NCORRY
+         CORRY(1,K) = ZERO
+  380 CONTINUE
+      CORRR(1,1) = ELEVEN/EIGHT
+      CORRR(1,2) = EIGHT/FIVE
+*
+      CALL CPYROW(ENTERX,NENTX,1,2)
+      CALL CPYROW(ENTERY,NENTY,1,2)
+      CALL CPYROW(REST,NREST,1,2)
+      CALL INIT(2,NININT,ININT,3,2,-1,DUM,DUM,DUM)
+      CORRY(2,1) = 137/(TEN*22)
+      CORRY(2,2) = 27/(FIVE*ELEVEN)
+      CORRY(2,3) = -191/(TEN*22)
+      CORRY(2,4) = ENTERY(2,4)
+      CORRY(2,5) = ENTERY(2,5)
+      CORRR(2,1) = ELEVEN/EIGHT
+      CORRR(2,2) = -SEVEN/20
+*     Perform (SREF) F06FUF tests.
+      CALL CHECK1('F06FUF',N,NENTX,ENTERX,NENTY,ENTERY,NREST,REST,
+     +            NININT,ININT,NCORRX,CORRX,NCORRY,CORRY,NCORRR,CORRR,
+     +            TOL)
+*
+*     Initialise data for (SGRFG) F06FRF tests.
+      N = 9
+      NENTX = 5
+      NENTY = 0
+      NREST = 2
+      NCORRX = 5
+      NCORRY = 0
+      NCORRR = 3
+      NININT = 2
+      ENTERX(1,1) = -THREE/FIVE
+      ENTERX(1,2) = -TWO/FIVE
+      ENTERX(1,3) = -ONE/FIVE
+      ENTERX(1,4) = FOUR/FIVE
+      ENTERX(1,5) = -FOUR/FIVE
+      REST(1,1) = TWO/FIVE
+      REST(1,2) = STOL
+      CALL INIT(1,NININT,ININT,5,1,DUM,DUM,DUM,DUM)
+      CORRR(1,1) = -RTTWO
+      CORRR(1,2) = STOL
+      CORRR(1,3) = SQRT(ONE+RTTWO/FIVE)
+      DO 400 K = 1, NENTX
+         CORRX(1,K) = ENTERX(1,K)
+  400 CONTINUE
+      CALL CPYROW(CORRX,NENTX,1,2)
+      CALL CPYROW(CORRX,NENTX,1,3)
+      CALL CPYROW(CORRX,NENTX,1,4)
+      CALL CPYROW(CORRX,NENTX,1,5)
+      CALL CPYROW(CORRX,NENTX,1,6)
+      CALL CPYROW(CORRX,NENTX,1,7)
+      CALL CPYROW(CORRX,NENTX,1,8)
+      CALL CPYROW(CORRX,NENTX,1,9)
+      DO 420 K = 1, ININT(1,1)*ININT(1,2), ININT(1,2)
+         CORRX(1,K) = ENTERX(1,K)/(RTTWO*CORRR(1,3))
+  420 CONTINUE
+*
+      CALL CPYROW(ENTERX,NENTX,1,2)
+      REST(2,1) = RTTHR/RTFIV
+      REST(2,2) = STOL
+      CALL INIT(2,NININT,ININT,2,2,DUM,DUM,DUM,DUM)
+      CORRR(2,1) = -ONE
+      CORRR(2,2) = STOL
+      CORRR(2,3) = SQRT(ONE+RTTHR/RTFIV)
+      DO 440 K = 1, ININT(2,1)*ININT(2,2), ININT(2,2)
+         CORRX(2,K) = ENTERX(2,K)/CORRR(2,3)
+  440 CONTINUE
+*
+      CALL CPYROW(ENTERX,NENTX,1,3)
+      REST(3,1) = -FOUR/FIVE
+      REST(3,2) = STOL
+      CALL INIT(3,NININT,ININT,1,1,DUM,DUM,DUM,DUM)
+      CORRR(3,1) = ONE
+      CORRR(3,2) = STOL
+      CORRR(3,3) = THREE/RTFIV
+      DO 460 K = 1, ININT(3,1)*ININT(3,2), ININT(3,2)
+         CORRX(3,K) = -ENTERX(3,K)/CORRR(3,3)
+  460 CONTINUE
+*
+      CALL CPYROW(ENTERX,NENTX,1,4)
+      REST(4,1) = RTTWO/RTFIV
+      REST(4,2) = STOL
+      CALL INIT(4,NININT,ININT,3,2,DUM,DUM,DUM,DUM)
+      CORRR(4,1) = -SIX/FIVE
+      CORRR(4,2) = STOL
+      CORRR(4,3) = SQRT(ONE+RTFIV/(THREE*RTTWO))
+      DO 480 K = 1, ININT(4,1)*ININT(4,2), ININT(4,2)
+         CORRX(4,K) = FIVE*ENTERX(4,K)/(SIX*CORRR(4,3))
+  480 CONTINUE
+*
+      CALL CPYROW(ENTERX,NENTX,1,5)
+      REST(5,1) = ONE
+      REST(5,2) = STOL
+      CALL INIT(5,NININT,ININT,0,1,DUM,DUM,DUM,DUM)
+      CORRR(5,1) = ONE
+      CORRR(5,2) = STOL
+      CORRR(5,3) = ZERO
+*
+      CALL CPYROW(ENTERX,NENTX,1,6)
+      ENTERX(6,1) = ZERO
+      REST(6,1) = ONE
+      REST(6,2) = STOL
+      CALL INIT(6,NININT,ININT,1,1,DUM,DUM,DUM,DUM)
+      CORRX(6,1) = ZERO
+      CORRR(6,1) = ONE
+      CORRR(6,2) = STOL
+      CORRR(6,3) = ZERO
+*
+      CALL CPYROW(ENTERX,NENTX,1,7)
+      REST(7,1) = ZERO
+      REST(7,2) = STOL
+      CALL INIT(7,NININT,ININT,1,1,DUM,DUM,DUM,DUM)
+      CORRX(7,1) = ONE
+      CORRR(7,1) = THREE/FIVE
+      CORRR(7,2) = STOL
+      CORRR(7,3) = ONE
+*
+      CALL CPYROW(ENTERX,NENTX,1,8)
+      REST(8,1) = STOL/TWO
+      REST(8,2) = STOL
+      ENTERX(8,1) = STOL/FOUR
+      CALL INIT(8,NININT,ININT,1,1,DUM,DUM,DUM,DUM)
+      CORRX(8,1) = STOL/FOUR
+      CORRR(8,1) = STOL/TWO
+      CORRR(8,2) = STOL
+      CORRR(8,3) = ZERO
+*
+      CALL CPYROW(ENTERX,NENTX,1,9)
+      REST(9,1) = ONE/FIVE
+      REST(9,2) = STOL
+      CALL INIT(9,NININT,ININT,1,1,DUM,DUM,DUM,DUM)
+      CORRR(9,1) = -RTTWO/RTFIV
+      CORRR(9,2) = STOL
+      CORRR(9,3) = SQRT(ONE+ONE/RTTEN)
+      CORRX(9,1) = -ENTERX(9,1)/(CORRR(9,1)*CORRR(9,3))
+*
+*     Perform (SGRFG) F06FRF tests.
+      CALL CHECK1('F06FRF',N,NENTX,ENTERX,NENTY,ENTERY,NREST,REST,
+     +            NININT,ININT,NCORRX,CORRX,NCORRY,CORRY,NCORRR,CORRR,
+     +            TOL)
+*
+*     Initialise data for (SSCMV) F06FDF tests.
+      N = 5
+      NENTX = 5
+      NENTY = 5
+      NREST = 1
+      NCORRX = 0
+      NCORRY = 5
+      NCORRR = 0
+      NININT = 3
+*
+      ENTERX(1,1) = -SIX
+      ENTERX(1,2) = -FIVE
+      ENTERX(1,3) = -FOUR
+      ENTERX(1,4) = -THREE
+      ENTERX(1,5) = -TWO
+      REST(1,1) = ONE
+      CALL INIT(1,NININT,ININT,5,1,1,DUM,DUM,DUM)
+      DO 500 K = 1, NCORRY
+         ENTERY(1,K) = ZERO
+         CORRY(1,K) = ZERO
+  500 CONTINUE
+      DO 520 K = 2, 5
+         CALL CPYROW(CORRY,NCORRY,1,K)
+         CALL CPYROW(ENTERY,NCORRY,1,K)
+  520 CONTINUE
+      DO 540 K = 1, NCORRY
+         CORRY(1,K) = ENTERX(1,K)
+  540 CONTINUE
+*
+      CALL CPYROW(ENTERX,NENTX,1,2)
+      REST(2,1) = -ONE
+      CALL INIT(2,NININT,ININT,3,-2,-1,DUM,DUM,DUM)
+      CORRY(2,1) = -ENTERX(2,1)
+      CORRY(2,2) = -ENTERX(2,3)
+      CORRY(2,3) = -ENTERX(2,5)
+*
+      CALL CPYROW(ENTERX,NENTX,1,3)
+      REST(3,1) = FLMIN
+      CALL INIT(3,NININT,ININT,2,-3,2,DUM,DUM,DUM)
+      CORRY(3,1) = FLMIN*ENTERX(3,4)
+      CORRY(3,3) = FLMIN*ENTERX(3,1)
+*
+      CALL CPYROW(ENTERX,NENTX,1,4)
+      REST(4,1) = -FLMAX/TEN
+      CALL INIT(4,NININT,ININT,4,1,-1,DUM,DUM,DUM)
+      CORRY(4,1) = REST(4,1)*ENTERX(4,4)
+      CORRY(4,2) = REST(4,1)*ENTERX(4,3)
+      CORRY(4,3) = REST(4,1)*ENTERX(4,2)
+      CORRY(4,4) = REST(4,1)*ENTERX(4,1)
+*
+      CALL CPYROW(ENTERX,NENTX,1,5)
+      REST(5,1) = ZERO
+      CALL INIT(5,NININT,ININT,5,-1,1,DUM,DUM,DUM)
+      DO 560 K = 1, NCORRY
+         CORRY(5,K) = ZERO
+  560 CONTINUE
+*
+*     Perform (SSCMV) F06FDF tests.
+      CALL CHECK1('F06FDF',N,NENTX,ENTERX,NENTY,ENTERY,NREST,REST,
+     +            NININT,ININT,NCORRX,CORRX,NCORRY,CORRY,NCORRR,CORRR,
+     +            TOL)
+*
+*     Initialise data for (SCOND) F06FLF tests.
+      N = 4
+      NENTX = 5
+      NENTY = 0
+      NREST = 0
+      NCORRX = 0
+      NCORRY = 0
+      NCORRR = 2
+      NININT = 2
+*
+      ENTERX(1,1) = -TWO
+      ENTERX(1,2) = -ONE
+      ENTERX(1,3) = -SIX
+      ENTERX(1,4) = THREE
+      ENTERX(1,5) = SIX
+      CALL INIT(1,NININT,ININT,5,1,DUM,DUM,DUM,DUM)
+      CORRR(1,1) = SIX
+      CORRR(1,2) = ONE
+*
+      CALL CPYROW(ENTERX,NENTX,1,2)
+      CALL INIT(2,NININT,ININT,3,2,DUM,DUM,DUM,DUM)
+      CORRR(2,1) = SIX
+      CORRR(2,2) = TWO
+*
+      CALL CPYROW(ENTERX,NENTX,1,3)
+      CALL INIT(3,NININT,ININT,2,3,DUM,DUM,DUM,DUM)
+      CORRR(3,1) = THREE
+      CORRR(3,2) = TWO
+*
+      CALL CPYROW(ENTERX,NENTX,1,4)
+      CALL INIT(4,NININT,ININT,0,3,DUM,DUM,DUM,DUM)
+      CORRR(4,1) = ZERO
+      CORRR(4,2) = ZERO
+*
+*     Perform (SCOND) F06FLF tests.
+      CALL CHECK1('F06FLF',N,NENTX,ENTERX,NENTY,ENTERY,NREST,REST,
+     +            NININT,ININT,NCORRX,CORRX,NCORRY,CORRY,NCORRR,CORRR,
+     +            TOL)
+*
+*     Initialise data for (SSROTG) F06FQF tests
+      N = 4
+      NENTX = 5
+      NININT = 2
+*
+      ENTERX(1,1) = -ONE/FIVE
+      ENTERX(1,2) = THREE/FIVE
+      ENTERX(1,3) = FOUR/FIVE
+      ENTERX(1,4) = ZERO
+      ENTERX(1,5) = -ONE
+      CALL INIT(1,NININT,ININT,5,1,DUM,DUM,DUM,DUM)
+      PIVOT(1) = 'F'
+      DIRECT(1) = 'F'
+      ALPHA(1) = ONE/FIVE
+      BETA(1) = TWO*RTTHRT/FIVE
+      CORRC(1,1) = ONE/RTTWO
+      CORRC(1,2) = RTTWO/RTELEV
+      CORRC(1,3) = RTELEV/(THREE*RTTHR)
+      CORRC(1,4) = ONE
+      CORRC(1,5) = THREE*RTTHR/(TWO*RTTHRT)
+      CORRS(1,1) = -ONE/RTTWO
+      CORRS(1,2) = THREE/RTELEV
+      CORRS(1,3) = FOUR/(THREE*RTTHR)
+      CORRS(1,4) = ZERO
+      CORRS(1,5) = -FIVE/(TWO*RTTHRT)
+*
+      CALL CPYROW(ENTERX,NENTX,1,2)
+      CALL INIT(2,NININT,ININT,3,2,DUM,DUM,DUM,DUM)
+      PIVOT(2) = 'F'
+      DIRECT(2) = 'B'
+      ALPHA(2) = ONE
+      BETA(2) = RTSXSV/FIVE
+      CORRC(2,1) = RTSXSX/RTSXSV
+      CORRC(2,2) = FIVE/RTTHTH
+      CORRC(2,3) = ONE/RTTWO
+      CORRS(2,1) = ONE/RTSXSV
+      CORRS(2,2) = -TWO*RTTWO/RTTHTH
+      CORRS(2,3) = ONE/RTTWO
+*
+      CALL CPYROW(ENTERX,NENTX,1,3)
+      CALL INIT(3,NININT,ININT,2,4,DUM,DUM,DUM,DUM)
+      PIVOT(3) = 'V'
+      DIRECT(3) = 'F'
+      ALPHA(3) = ONE
+      BETA(3) = RTFVON/FIVE
+      CORRC(3,1) = FIVE/RTTWSX
+      CORRC(3,2) = FIVE/RTFVON
+      CORRS(3,1) = -ONE/RTTWSX
+      CORRS(3,2) = RTTWSX/RTFVON
+*
+      CALL CPYROW(ENTERX,NENTX,1,4)
+      CALL INIT(4,NININT,ININT,2,3,DUM,DUM,DUM,DUM)
+      PIVOT(4) = 'V'
+      DIRECT(4) = 'B'
+      ALPHA(4) = ONE
+      BETA(4) = RTTWSX/FIVE
+      CORRC(4,1) = FIVE/RTTWSX
+      CORRC(4,2) = ONE
+      CORRS(4,1) = -ONE/RTTWSX
+      CORRS(4,2) = ZERO
+*
+*     Perform (SSROTG) F06FQF tests.
+      CALL CHECK2('F06FQF',PIVOT,DIRECT,N,NENTX,ENTERX,ALPHA,BETA,CORRC,
+     +            CORRS,NININT,ININT,TOL)
+*
+*     Initialise data for (ILOAD) F06DBF tests
+      N = 4
+      NENTIX = 5
+      NCORIX = 5
+      NENTIY = 0
+      NCORIY = 0
+      NIREST = 1
+      NININT = 2
+      ENTIX(1,1) = 0
+      ENTIX(1,2) = 0
+      ENTIX(1,3) = 0
+      ENTIX(1,4) = 0
+      ENTIX(1,5) = 0
+      IREST(1,1) = 0
+      CALL INIT(1,NININT,ININT,5,1,DUM,DUM,DUM,DUM)
+      CORRIX(1,1) = 0
+      CORRIX(1,2) = 0
+      CORRIX(1,3) = 0
+      CORRIX(1,4) = 0
+      CORRIX(1,5) = 0
+*
+      CALL CPYRWI(ENTIX,NENTIX,1,2)
+      IREST(2,1) = 100
+      CALL INIT(2,NININT,ININT,5,1,DUM,DUM,DUM,DUM)
+      CORRIX(2,1) = 100
+      CORRIX(2,2) = 100
+      CORRIX(2,3) = 100
+      CORRIX(2,4) = 100
+      CORRIX(2,5) = 100
+*
+      CALL CPYRWI(ENTIX,NENTIX,1,3)
+      IREST(3,1) = -10
+      CALL INIT(3,NININT,ININT,3,2,DUM,DUM,DUM,DUM)
+      CORRIX(3,1) = -10
+      CORRIX(3,2) = 0
+      CORRIX(3,3) = -10
+      CORRIX(3,4) = 0
+      CORRIX(3,5) = -10
+*
+      CALL CPYRWI(ENTIX,NENTIX,1,4)
+      IREST(4,1) = 1
+      CALL INIT(4,NININT,ININT,2,4,DUM,DUM,DUM,DUM)
+      CORRIX(4,1) = 1
+      CORRIX(4,2) = 0
+      CORRIX(4,3) = 0
+      CORRIX(4,4) = 0
+      CORRIX(4,5) = 1
+*
+*     Perform (ILOAD) F06DBF tests.
+      CALL CHECK3('F06DBF',N,NENTIX,ENTIX,NENTIY,ENTIY,NIREST,IREST,
+     +            NININT,ININT,NCORIX,CORRIX,NCORIY,CORRIY)
+*
+*     Initialise data for (ICOPY) F06DFF tests
+      N = 4
+      NENTIX = 5
+      NCORIX = 0
+      NENTIY = 5
+      NCORIY = 5
+      NIREST = 0
+      NININT = 3
+      ENTIX(1,1) = -1
+      ENTIX(1,2) = 2
+      ENTIX(1,3) = 3
+      ENTIX(1,4) = -4
+      ENTIX(1,5) = -5
+      ENTIY(1,1) = 0
+      ENTIY(1,2) = 0
+      ENTIY(1,3) = 0
+      ENTIY(1,4) = 0
+      ENTIY(1,5) = 0
+      CALL INIT(1,NININT,ININT,5,1,1,DUM,DUM,DUM)
+      CORRIY(1,1) = -1
+      CORRIY(1,2) = 2
+      CORRIY(1,3) = 3
+      CORRIY(1,4) = -4
+      CORRIY(1,5) = -5
+*
+      CALL CPYRWI(ENTIX,NENTIX,1,2)
+      CALL CPYRWI(ENTIY,NENTIY,1,2)
+      CALL INIT(2,NININT,ININT,5,-1,-1,DUM,DUM,DUM)
+      CORRIY(2,1) = -1
+      CORRIY(2,2) = 2
+      CORRIY(2,3) = 3
+      CORRIY(2,4) = -4
+      CORRIY(2,5) = -5
+*
+      CALL CPYRWI(ENTIX,NENTIX,1,3)
+      CALL CPYRWI(ENTIY,NENTIY,1,3)
+      CALL INIT(3,NININT,ININT,3,-2,1,DUM,DUM,DUM)
+      CORRIY(3,1) = -5
+      CORRIY(3,2) = 3
+      CORRIY(3,3) = -1
+      CORRIY(3,4) = 0
+      CORRIY(3,5) = 0
+*
+      CALL CPYRWI(ENTIX,NENTIX,1,4)
+      CALL CPYRWI(ENTIY,NENTIY,1,4)
+      CALL INIT(4,NININT,ININT,2,1,-4,DUM,DUM,DUM)
+      CORRIY(4,1) = 2
+      CORRIY(4,2) = 0
+      CORRIY(4,3) = 0
+      CORRIY(4,4) = 0
+      CORRIY(4,5) = -1
+*
+*     Perform (ICOPY) F06DFF tests.
+      CALL CHECK3('F06DFF',N,NENTIX,ENTIX,NENTIY,ENTIY,NIREST,IREST,
+     +            NININT,ININT,NCORIX,CORRIX,NCORIY,CORRIY)
+*
+*     Initialise data for (ISRANK) F06KLF tests.
+      N = 4
+      NENTX = 5
+      NENTY = 0
+      NREST = 1
+      NCORRX = 0
+      NCORRY = 0
+      NCORRR = 1
+      NININT = 2
+*
+      ENTERX(1,1) = -THREE
+      ENTERX(1,2) = TWO
+      ENTERX(1,3) = FIVE
+      ENTERX(1,4) = -FOUR
+      ENTERX(1,5) = ONE
+      CALL INIT(1,NININT,ININT,5,1,DUM,DUM,DUM,DUM)
+      REST(1,1) = -ONE
+      CORRR(1,1) = 5
+*
+      CALL CPYROW(ENTERX,NENTX,1,2)
+      CALL INIT(2,NININT,ININT,5,1,DUM,DUM,DUM,DUM)
+      REST(2,1) = ONE/TWO
+      CORRR(2,1) = 4
+*
+      CALL CPYROW(ENTERX,NENTX,1,3)
+      CALL INIT(3,NININT,ININT,5,1,DUM,DUM,DUM,DUM)
+      REST(3,1) = STOL
+      CORRR(3,1) = 5
+*
+      CALL CPYROW(ENTERX,NENTX,1,4)
+      CALL INIT(4,NININT,ININT,2,3,DUM,DUM,DUM,DUM)
+      REST(4,1) = ONE/TWO
+      CORRR(4,1) = 2
+*
+*     Perform (ISRANK) F06KLF tests.
+      CALL CHECK1('F06KLF',N,NENTX,ENTERX,NENTY,ENTERY,NREST,REST,
+     +            NININT,ININT,NCORRX,CORRX,NCORRY,CORRY,NCORRR,CORRR,
+     +            TOL)
+*
+*     Initialise data for (SWNORM) F06FKF tests.
+      N = 4
+      NENTX = 5
+      NENTY = 5
+      NREST = 0
+      NCORRX = 0
+      NCORRY = 0
+      NCORRR = 1
+      NININT = 3
+      ENTERX(1,1) = FIVE
+      ENTERX(1,2) = TWO
+      ENTERX(1,3) = ONE
+      ENTERX(1,4) = THREE
+      ENTERX(1,5) = THREE
+      ENTERY(1,1) = -TWO
+      ENTERY(1,2) = ZERO
+      ENTERY(1,3) = ONE
+      ENTERY(1,4) = -ONE
+      ENTERY(1,5) = TWO
+      CALL INIT(1,NININT,ININT,5,1,1,DUM,DUM,DUM)
+      CORRR(1,1) = SIX
+*
+      CALL CPYROW(ENTERX,NENTX,1,2)
+      CALL CPYROW(ENTERY,NENTY,1,2)
+      CALL INIT(2,NININT,ININT,5,-1,-1,DUM,DUM,DUM)
+      CORRR(2,1) = SIX
+*
+      CALL CPYROW(ENTERX,NENTX,1,3)
+      CALL CPYROW(ENTERY,NENTY,1,3)
+      CALL INIT(3,NININT,ININT,3,1,-1,DUM,DUM,DUM)
+      CORRR(3,1) = THREE
+*
+      CALL CPYROW(ENTERX,NENTX,1,4)
+      CALL CPYROW(ENTERY,NENTY,1,4)
+      CALL INIT(4,NININT,ININT,2,-3,4,DUM,DUM,DUM)
+      CORRR(4,1) = FOUR*RTTWO
+*
+*     Perform (SWNORM) F06FKF tests.
+      CALL CHECK1('F06FKF',N,NENTX,ENTERX,NENTY,ENTERY,NREST,REST,
+     +            NININT,ININT,NCORRX,CORRX,NCORRY,CORRY,NCORRR,CORRR,
+     +            TOL)
+      STOP
+*
+99999 FORMAT (' F06FAF Example Program Results',/1X)
+      END
+      SUBROUTINE INIT(I,J,ININT,I1,I2,I3,I4,I5,I6)
+*     Sets ININT (I, 1) ... ININT (I, J) to be I1, I2 ... IJ
+*     .. Scalar Arguments ..
+      INTEGER         I, I1, I2, I3, I4, I5, I6, J
+*     .. Array Arguments ..
+      INTEGER         ININT(15,6)
+*     .. Executable Statements ..
+      IF (J.GT.0) ININT(I,1) = I1
+      IF (J.GT.1) ININT(I,2) = I2
+      IF (J.GT.2) ININT(I,3) = I3
+      IF (J.GT.3) ININT(I,4) = I4
+      IF (J.GT.4) ININT(I,5) = I5
+      IF (J.GT.5) ININT(I,6) = I6
+      RETURN
+      END
+      SUBROUTINE CPYROW(ENTER,LEN,FROM,TO)
+*     Copies one row of ENTER to another.
+*     .. Scalar Arguments ..
+      INTEGER           FROM, LEN, TO
+*     .. Array Arguments ..
+      DOUBLE PRECISION  ENTER(15,6)
+*     .. Local Scalars ..
+      INTEGER           I
+*     .. Executable Statements ..
+      DO 20 I = 1, LEN
+         ENTER(TO,I) = ENTER(FROM,I)
+   20 CONTINUE
+      RETURN
+      END
+      SUBROUTINE CPYRWI(ENTER,LEN,FROM,TO)
+*     Copies one row of ENTER to another.
+*     .. Scalar Arguments ..
+      INTEGER           FROM, LEN, TO
+*     .. Array Arguments ..
+      INTEGER           ENTER(6,6)
+*     .. Local Scalars ..
+      INTEGER           I
+*     .. Executable Statements ..
+      DO 20 I = 1, LEN
+         ENTER(TO,I) = ENTER(FROM,I)
+   20 CONTINUE
+      RETURN
+      END
+      SUBROUTINE TOVECR(MATRIX,VECTOR,LEN,FROM)
+*     Copies one row of MATRIX to VECTOR
+*     .. Scalar Arguments ..
+      INTEGER           FROM, LEN
+*     .. Array Arguments ..
+      DOUBLE PRECISION  MATRIX(15,6), VECTOR(6)
+*     .. Local Scalars ..
+      INTEGER           I
+*     .. Executable Statements ..
+      DO 20 I = 1, LEN
+         VECTOR(I) = MATRIX(FROM,I)
+   20 CONTINUE
+      RETURN
+      END
+      SUBROUTINE TOVECI(MATRIX,VECTOR,LEN,FROM)
+*     Copies one row of MATRIX to VECTOR
+*     .. Scalar Arguments ..
+      INTEGER           FROM, LEN
+*     .. Array Arguments ..
+      INTEGER           MATRIX(6,6), VECTOR(6)
+*     .. Local Scalars ..
+      INTEGER           I
+*     .. Executable Statements ..
+      DO 20 I = 1, LEN
+         VECTOR(I) = MATRIX(FROM,I)
+   20 CONTINUE
+      RETURN
+      END
+      SUBROUTINE CHECK1(FUNNAM,N,NENTX,ENTERX,NENTY,ENTERY,NREST,REST,
+     +                  NININT,ININT,NCORRX,CORRX,NCORRY,CORRY,NCORRR,
+     +                  CORRR,TOL)
+*     .. Parameters ..
+      INTEGER           NOUT
+      PARAMETER         (NOUT=6)
+*     .. Scalar Arguments ..
+      DOUBLE PRECISION  TOL
+      INTEGER           N, NCORRR, NCORRX, NCORRY, NENTX, NENTY, NININT,
+     +                  NREST
+      CHARACTER*6       FUNNAM
+*     .. Array Arguments ..
+      DOUBLE PRECISION  CORRR(15,6), CORRX(15,6), CORRY(15,6),
+     +                  ENTERX(15,6), ENTERY(15,6), REST(15,6)
+      INTEGER           ININT(15,6)
+*     .. Local Scalars ..
+      INTEGER           I, K
+      LOGICAL           FIRST, MISSED
+      CHARACTER*15      PR
+*     .. Local Arrays ..
+      DOUBLE PRECISION  COPYR(6), COPYX(6), COPYY(6), CPYCRR(6),
+     +                  CPYCRX(6), CPYCRY(6)
+*     .. External Functions ..
+      DOUBLE PRECISION  F06FAF, F06FKF
+      INTEGER           F06KLF
+      LOGICAL           NODIFV
+      EXTERNAL          F06FAF, F06FKF, F06KLF, NODIFV
+*     .. External Subroutines ..
+      EXTERNAL          F06FBF, F06FCF, F06FDF, F06FGF, F06FJF, F06FLF,
+     +                  F06FPF, F06FRF, F06FSF, F06FTF, F06FUF, TOVECR
+*     .. Executable Statements ..
+      FIRST = .TRUE.
+      WRITE (NOUT,*) ' Testing routine   ', FUNNAM
+      DO 20 I = 1, N
+         CALL TOVECR(ENTERX,COPYX,NENTX,I)
+         CALL TOVECR(ENTERY,COPYY,NENTY,I)
+         CALL TOVECR(REST,COPYR,NREST,I)
+         CALL TOVECR(CORRX,CPYCRX,NCORRX,I)
+         CALL TOVECR(CORRY,CPYCRY,NCORRY,I)
+         CALL TOVECR(CORRR,CPYCRR,NCORRR,I)
+         IF (FUNNAM.EQ.'F06FAF') THEN
+            COPYR(1) = F06FAF(ININT(I,1),ININT(I,2),COPYR(1),COPYX,
+     +                 ININT(I,3),COPYR(2),COPYY,ININT(I,4))
+         ELSE IF (FUNNAM.EQ.'F06FJF') THEN
+            CALL F06FJF(ININT(I,1),COPYX,ININT(I,2),COPYR(1),COPYR(2))
+         ELSE IF (FUNNAM.EQ.'F06FKF') THEN
+            COPYR(1) = F06FKF(ININT(I,1),COPYX,ININT(I,2),COPYY,
+     +                 ININT(I,3))
+         ELSE IF (FUNNAM.EQ.'F06FBF') THEN
+            CALL F06FBF(ININT(I,1),COPYR(1),COPYX,ININT(I,2))
+         ELSE IF (FUNNAM.EQ.'F06FGF') THEN
+            CALL F06FGF(ININT(I,1),COPYX,ININT(I,2))
+         ELSE IF (FUNNAM.EQ.'F06FPF') THEN
+            CALL F06FPF(ININT(I,1),COPYX,ININT(I,2),COPYY,ININT(I,3),
+     +                  COPYR(1),COPYR(2))
+         ELSE IF (FUNNAM.EQ.'F06FCF') THEN
+            CALL F06FCF(ININT(I,1),COPYY,ININT(I,2),COPYX,ININT(I,3))
+         ELSE IF (FUNNAM.EQ.'F06FSF') THEN
+            CALL F06FSF(ININT(I,1),COPYR(1),COPYX,ININT(I,2),COPYR(2),
+     +                  COPYR(3))
+         ELSE IF (FUNNAM.EQ.'F06FTF') THEN
+            CALL F06FTF(ININT(I,1),COPYR(1),COPYX,ININT(I,2),COPYR(2),
+     +                  COPYY,ININT(I,3))
+         ELSE IF (FUNNAM.EQ.'F06FUF') THEN
+            CALL F06FUF(ININT(I,1),COPYX,ININT(I,2),COPYR(1),COPYR(2),
+     +                  COPYY,ININT(I,3))
+         ELSE IF (FUNNAM.EQ.'F06FRF') THEN
+            CALL F06FRF(ININT(I,1),COPYR(1),COPYX,ININT(I,2),COPYR(2),
+     +                  COPYR(3))
+         ELSE IF (FUNNAM.EQ.'F06FDF') THEN
+            CALL F06FDF(ININT(I,1),COPYR(1),COPYX,ININT(I,2),COPYY,
+     +                  ININT(I,3))
+         ELSE IF (FUNNAM.EQ.'F06FLF') THEN
+            CALL F06FLF(ININT(I,1),COPYX,ININT(I,2),COPYR(1),COPYR(2))
+         ELSE IF (FUNNAM.EQ.'F06KLF') THEN
+            COPYR(1) = F06KLF(ININT(I,1),COPYX,ININT(I,2),COPYR(1))
+*           Assign result of integer function to real variable for
+*           check.
+         ELSE
+            WRITE (NOUT,*) ' Shouldn''t be here in CHECK1'
+            STOP
+         END IF
+         MISSED = .NOT. NODIFV(NCORRX,COPYX,CPYCRX,TOL)
+     +            .OR. .NOT. NODIFV(NCORRY,COPYY,CPYCRY,TOL)
+     +            .OR. .NOT. NODIFV(NCORRR,COPYR,CPYCRR,TOL)
+         IF (MISSED) THEN
+            IF (FIRST) THEN
+               FIRST = .FALSE.
+               WRITE (NOUT,*) '               **** FAIL ****'
+            END IF
+*           Give details of failure here.
+            PR = '  entered with '
+            IF (NENTX.GT.0) THEN
+               WRITE (NOUT,99999) PR, 'X = ', (ENTERX(I,K),K=1,NENTX)
+               PR = '           and '
+            END IF
+            IF (NENTY.GT.0) THEN
+               WRITE (NOUT,99999) PR, 'Y = ', (ENTERY(I,K),K=1,NENTY)
+               PR = '           and '
+            END IF
+            IF (NREST.GT.0) THEN
+               WRITE (NOUT,99999) PR, 'R = ', (REST(I,K),K=1,NREST)
+            END IF
+            IF (FUNNAM.EQ.'F06FAF') THEN
+               WRITE (NOUT,99998) '   N, J, INCX, INCY = ', ININT(I,1),
+     +           ININT(I,2), ININT(I,3), ININT(I,4)
+            ELSE IF (NENTY.GT.0) THEN
+               WRITE (NOUT,99998) '   N, INCX, INCY = ', ININT(I,1),
+     +           ININT(I,2), ININT(I,3)
+            ELSE
+               WRITE (NOUT,99998) '         N, INCX = ', ININT(I,1),
+     +           ININT(I,2)
+            END IF
+            PR = ' returned with '
+            IF (NCORRX.GT.0) THEN
+               WRITE (NOUT,99999) PR, 'X = ', (COPYX(K),K=1,NCORRX)
+               WRITE (NOUT,99999) '     (should ', 'be)   ',
+     +           (CPYCRX(K),K=1,NCORRX)
+               PR = '           and '
+            END IF
+            IF (NCORRY.GT.0) THEN
+               WRITE (NOUT,99999) PR, 'Y = ', (COPYY(K),K=1,NCORRY)
+               WRITE (NOUT,99999) '     (should ', 'be)   ',
+     +           (CPYCRY(K),K=1,NCORRY)
+               PR = '           and '
+            END IF
+            IF (NCORRR.GT.0) THEN
+               WRITE (NOUT,99999) PR, 'R = ', (COPYR(K),K=1,NCORRR)
+               WRITE (NOUT,99999) '     (should ', 'be)   ',
+     +           (CPYCRR(K),K=1,NCORRR)
+            END IF
+         END IF
+   20 CONTINUE
+      IF (FIRST) THEN
+         WRITE (NOUT,*) '               ---- PASS ----'
+      END IF
+      WRITE (NOUT,*)
+*
+      RETURN
+*
+99999 FORMAT (1X,2A,(3D30.20,/))
+99998 FORMAT (1X,A,6I6)
+      END
+      SUBROUTINE CHECK2(FUNNAM,PIVOT,DIRECT,N,NENTX,ENTERX,ALPHA,BETA,
+     +                  CORRC,CORRS,NININT,ININT,TOL)
+*     .. Parameters ..
+      INTEGER           NOUT
+      PARAMETER         (NOUT=6)
+*     .. Scalar Arguments ..
+      DOUBLE PRECISION  TOL
+      INTEGER           N, NENTX, NININT
+      CHARACTER*6       FUNNAM
+*     .. Array Arguments ..
+      DOUBLE PRECISION  ALPHA(15), BETA(15), CORRC(15,6), CORRS(15,6),
+     +                  ENTERX(15,6)
+      INTEGER           ININT(15,6)
+      CHARACTER         DIRECT(15), PIVOT(15)
+*     .. Local Scalars ..
+      DOUBLE PRECISION  CPYALP
+      INTEGER           I, K
+      LOGICAL           FIRST, MISSED
+*     .. Local Arrays ..
+      DOUBLE PRECISION  C(6), COPYX(6), CPYCRC(6), CPYCRS(6), S(6)
+*     .. External Functions ..
+      LOGICAL           NODIFF, NODIFV
+      EXTERNAL          NODIFF, NODIFV
+*     .. External Subroutines ..
+      EXTERNAL          F06FQF, TOVECR
+*     .. Executable Statements ..
+      FIRST = .TRUE.
+      WRITE (NOUT,*) ' Testing routine   ', FUNNAM
+      DO 20 I = 1, N
+         CALL TOVECR(ENTERX,COPYX,NENTX,I)
+         CALL TOVECR(CORRC,CPYCRC,ININT(I,1),I)
+         CALL TOVECR(CORRS,CPYCRS,ININT(I,1),I)
+         CPYALP = ALPHA(I)
+         IF (FUNNAM.EQ.'F06FQF') THEN
+            CALL F06FQF(PIVOT(I),DIRECT(I),ININT(I,1),ALPHA(I),COPYX,
+     +                  ININT(I,2),C,S)
+         ELSE
+            WRITE (NOUT,*) ' Shouldn''t be here in CHECK2'
+            STOP
+         END IF
+         MISSED = .NOT. NODIFV(ININT(I,1),C,CPYCRC,TOL)
+     +            .OR. .NOT. NODIFV(ININT(I,1),S,CPYCRS,TOL)
+     +            .OR. .NOT. NODIFF(ALPHA(I),BETA(I),TOL)
+         IF (MISSED) THEN
+            IF (FIRST) THEN
+               FIRST = .FALSE.
+               WRITE (NOUT,*) '               **** FAIL ****'
+            END IF
+*           Give details of failure here.
+            WRITE (NOUT,99999) '  entered with X = ',
+     +        (ENTERX(I,K),K=1,NENTX)
+            WRITE (NOUT,99999) '           ALPHA = ', CPYALP
+            WRITE (NOUT,99998) '     and N, INCX = ', ININT(I,1),
+     +        ININT(I,2)
+            WRITE (NOUT,99999) ' returned with C = ',
+     +        (C(K),K=1,ININT(I,1))
+            WRITE (NOUT,99999) '     (should be)   ',
+     +        (CPYCRC(K),K=1,ININT(I,1))
+            WRITE (NOUT,99999) '               S = ',
+     +        (S(K),K=1,ININT(I,1))
+            WRITE (NOUT,99999) '     (should be)   ',
+     +        (CPYCRS(K),K=1,ININT(I,1))
+            WRITE (NOUT,99999) '        and BETA = ', ALPHA(I)
+            WRITE (NOUT,99999) '     (should be)   ', BETA(I)
+         END IF
+   20 CONTINUE
+      IF (FIRST) THEN
+         WRITE (NOUT,*) '               ---- PASS ----'
+      END IF
+      WRITE (NOUT,*)
+*
+      RETURN
+*
+99999 FORMAT (1X,A,(3D30.20,/))
+99998 FORMAT (1X,A,6I6)
+      END
+      SUBROUTINE CHECK3(FUNNAM,N,NENTIX,ENTIX,NENTIY,ENTIY,NIREST,IREST,
+     +                  NININT,ININT,NCORIX,CORRIX,NCORIY,CORRIY)
+*     .. Parameters ..
+      INTEGER           NOUT
+      PARAMETER         (NOUT=6)
+*     .. Scalar Arguments ..
+      INTEGER           N, NCORIX, NCORIY, NENTIX, NENTIY, NININT,
+     +                  NIREST
+      CHARACTER*6       FUNNAM
+*     .. Array Arguments ..
+      INTEGER           CORRIX(6,6), CORRIY(6,6), ENTIX(6,6),
+     +                  ENTIY(6,6), ININT(15,6), IREST(6,6)
+*     .. Local Scalars ..
+      INTEGER           I, K
+      LOGICAL           FIRST, MISSED
+      CHARACTER*15      PR
+*     .. Local Arrays ..
+      INTEGER           COPYR(6), COPYX(6), COPYY(6), CPYCRX(6),
+     +                  CPYCRY(6)
+*     .. External Functions ..
+      LOGICAL           INDIFF
+      EXTERNAL          INDIFF
+*     .. External Subroutines ..
+      EXTERNAL          F06DBF, F06DFF, TOVECI
+*     .. Executable Statements ..
+      FIRST = .TRUE.
+      WRITE (NOUT,*) ' Testing routine   ', FUNNAM
+      DO 20 I = 1, N
+         CALL TOVECI(ENTIX,COPYX,NENTIX,I)
+         CALL TOVECI(ENTIY,COPYY,NENTIY,I)
+         CALL TOVECI(IREST,COPYR,NIREST,I)
+         CALL TOVECI(CORRIX,CPYCRX,NCORIX,I)
+         CALL TOVECI(CORRIY,CPYCRY,NCORIY,I)
+         IF (FUNNAM.EQ.'F06DBF') THEN
+            CALL F06DBF(ININT(I,1),COPYR(1),COPYX,ININT(I,2))
+         ELSE IF (FUNNAM.EQ.'F06DFF') THEN
+            CALL F06DFF(ININT(I,1),COPYX,ININT(I,2),COPYY,ININT(I,3))
+         ELSE
+            WRITE (NOUT,*) ' Shouldn''t be here in CHECK3'
+            STOP
+         END IF
+         MISSED = .NOT. INDIFF(NCORIX,COPYX,CPYCRX)
+     +            .OR. .NOT. INDIFF(NCORIY,COPYY,CPYCRY)
+         IF (MISSED) THEN
+            IF (FIRST) THEN
+               FIRST = .FALSE.
+               WRITE (NOUT,*) '               **** FAIL ****'
+            END IF
+*           Give details of failure here.
+            PR = '  entered with '
+            IF (NENTIX.GT.0) THEN
+               WRITE (NOUT,99999) PR//'X = ', (ENTIX(I,K),K=1,NENTIX)
+               PR = '           and '
+            END IF
+            IF (NENTIY.GT.0) THEN
+               WRITE (NOUT,99999) PR//'Y = ', (ENTIY(I,K),K=1,NENTIY)
+               PR = '           and '
+            END IF
+            IF (NIREST.GT.0) THEN
+               WRITE (NOUT,99999) PR//'R = ', (IREST(I,K),K=1,NIREST)
+            END IF
+            IF (NENTIY.GT.0) THEN
+               WRITE (NOUT,99999) '   N, INCX, INCY = ', ININT(I,1),
+     +           ININT(I,2), ININT(I,3)
+            ELSE
+               WRITE (NOUT,99999) '         N, INCX = ', ININT(I,1),
+     +           ININT(I,2)
+            END IF
+            PR = ' returned with '
+            IF (NCORIX.GT.0) THEN
+               WRITE (NOUT,99999) PR//'X = ', (COPYX(K),K=1,NCORIX)
+               WRITE (NOUT,99999) '     (should be)   ',
+     +           (CPYCRX(K),K=1,NCORIX)
+               PR = '           and '
+            END IF
+            IF (NCORIY.GT.0) THEN
+               WRITE (NOUT,99999) PR//'Y = ', (COPYY(K),K=1,NCORIY)
+               WRITE (NOUT,99999) '     (should be)   ',
+     +           (CPYCRY(K),K=1,NCORIY)
+               PR = '           and '
+            END IF
+         END IF
+   20 CONTINUE
+      IF (FIRST) THEN
+         WRITE (NOUT,*) '               ---- PASS ----'
+      END IF
+      WRITE (NOUT,*)
+*
+      RETURN
+*
+99999 FORMAT (1X,A,6I6)
+      END
+      LOGICAL FUNCTION INDIFF(LEN,SCOMP,STRUE)
+*     .. Scalar Arguments ..
+      INTEGER                 LEN
+*     .. Array Arguments ..
+      INTEGER                 SCOMP(6), STRUE(6)
+*     .. Local Scalars ..
+      INTEGER                 I
+      LOGICAL                 PASS
+*     .. Executable Statements ..
+      PASS = .TRUE.
+      DO 20 I = 1, LEN
+         IF (SCOMP(I).NE.STRUE(I)) PASS = .FALSE.
+   20 CONTINUE
+      INDIFF = PASS
+      RETURN
+      END
+      LOGICAL FUNCTION NODIFF(SCOMP,STRUE,TOL)
+*     Returns .TRUE. if there is no difference between SCOMP and STRUE,
+*     to tolerance TOL.
+*     .. Parameters ..
+      DOUBLE PRECISION        ZERO
+      PARAMETER               (ZERO=0.0D+0)
+*     .. Scalar Arguments ..
+      DOUBLE PRECISION        SCOMP, STRUE, TOL
+*     .. Local Scalars ..
+      DOUBLE PRECISION        DIF, SC, ST
+*     .. Intrinsic Functions ..
+      INTRINSIC               ABS, MAX
+*     .. Executable Statements ..
+      IF (ABS(SCOMP).LT.TOL) THEN
+         SC = ZERO
+      ELSE
+         SC = SCOMP
+      END IF
+      IF (ABS(STRUE).LT.TOL) THEN
+         ST = ZERO
+      ELSE
+         ST = STRUE
+      END IF
+      DIF = ABS(SC-ST)
+      IF (SC.NE.ZERO .AND. ST.NE.ZERO) DIF = DIF/MAX(ABS(SC),ABS(ST))
+      NODIFF = DIF .LE. TOL
+      RETURN
+      END
+      LOGICAL FUNCTION NODIFV(LEN,SCOMP,STRUE,TOL)
+*     Returns .TRUE. if there is no difference between arrays SCOMP and
+*     STRUE, to tolerance TOL. Differences are checked componentwise.
+*     .. Scalar Arguments ..
+      DOUBLE PRECISION        TOL
+      INTEGER                 LEN
+*     .. Array Arguments ..
+      DOUBLE PRECISION        SCOMP(*), STRUE(*)
+*     .. Local Scalars ..
+      INTEGER                 I
+*     .. External Functions ..
+      LOGICAL                 NODIFF
+      EXTERNAL                NODIFF
+*     .. Executable Statements ..
+      NODIFV = .TRUE.
+      DO 20 I = 1, LEN
+         NODIFV = NODIFV .AND. NODIFF(SCOMP(I),STRUE(I),TOL)
+   20 CONTINUE
+      RETURN
+      END

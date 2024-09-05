@@ -1,0 +1,29 @@
+ F06GRF Example Program Results
+
+ MAX. NO. OF PRINTED ERROR MESSAGES =         10
+ THRESHOLD VALUE OF TEST RATIO      =        5.0
+
+ NUMBER OF VALUES OF NZ        =         16
+
+ VALUES OF NZ =    -1    0    1    2    5    9   31   32   33   63
+                   64   65  127  128  129  257
+
+ NUMBER OF VALUES OF A         =          3
+
+ VALUES OF A =   (   0.0000D+00,   0.0000D+00)
+                 (   1.0000D+00,   0.0000D+00)
+                 (   7.0000D-01,   3.0000D-01)
+
+ ZDOTUI PASSED ALL TESTS.
+
+ ZDOTCI PASSED ALL TESTS.
+
+ ZAXPYI PASSED ALL TESTS.
+
+ ZGTHR  PASSED ALL TESTS.
+
+ ZGTHRZ PASSED ALL TESTS.
+
+ ZSCTR  PASSED ALL TESTS.
+
+ ALL TESTS PASSED.
