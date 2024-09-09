@@ -1,0 +1,32 @@
+#!/bin/sh
+# This script compiles all the Library source and builds an archive.
+#
+CMDNAM=`basename $0`
+usage()
+{
+   echo " The $CMDNAM script compiles and builds the NAG Fortran Library."
+   echo " This version is for Mk 17 under AIX with xlf 2.3."
+   echo " Specification :"
+   echo ""
+   echo "      ./$CMDNAM [-a] [-u] [-h]"
+   echo ""
+   echo " Use  -a  to build the archive if all the objects already exist (restart)"
+   echo "      -u  to build the underscore appended (-qextname) library"
+   echo "      -h  to see this message"
+}
+COMP='y'
+UOPT=''
+for ARG
+do
+   case $ARG in
+      -a) COMP='n' ;;
+      -u) UOPT='-u' ;;
+       *) usage ; exit ;;
+   esac
+   shift
+done
+case $COMP in
+   y) ./compile $UOPT ;;
+esac
+./buildlib $UOPT
+./rmobjs

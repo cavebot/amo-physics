@@ -1,0 +1,10 @@
+      INTEGER FUNCTION X02BKF()
+C     MARK 12 RELEASE. NAG COPYRIGHT 1986.
+C
+C     RETURNS THE MODEL PARAMETER, EMIN.
+C
+C     .. Executable Statements ..
+      X02BKF =  -1021
+C     DBL_MIN_EXP
+      RETURN
+      END

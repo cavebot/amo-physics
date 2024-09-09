@@ -1,0 +1,226 @@
+Withdrawn Routines
+
+This document lists all those routines that have been present in earlier
+Marks of the Library (back as far as Mark 6), but have since been
+withdrawn. The document gives the names of the routines which are now
+recommended as their replacements. Another document Advice on
+Replacement Calls for Withdrawn/Superseded Routines gives more detailed
+guidance for those routines withdrawn since Mark 13.
+
+Withdrawn     Mark of    Recommended Replacement
+ Routine    Withdrawal
+
+C02ADF          15        C02AFF
+C02AEF          16        C02AGF
+C05AAF           9        C05ADF
+C05ABF           9        C05ADF
+C05ACF           9        C05ADF
+C05NAF          10        C05NBF or C05NCF
+C05PAF           8        C05PBF or C05PCF
+C06AAF           9        C06ECF or C06FRF
+C06ABF           9        C06EAF or C06FPF
+C06ACF          12        C06EKF or C06FKF
+C06ADF          12        C06FFF
+D01AAF           8        D01AJF
+D01ABF           8        D01AJF
+D01ACF           9        D01BDF
+D01ADF           8        D01BAF or D01BBF
+D01AEF           8        D01BAF or D01BBF
+D01AFF           8        D01BAF or D01BBF
+D01AGF           9        D01AJF
+D01FAF          11        D01GBF
+D02AAF           8        D02PDF and related routines
+D02ABF           8        D02PCF and related routines
+D02ADF           9        D02HAF or D02GAF
+D02AFF           9        D02TGF
+D02AHF           8        D02CJF or D02QFF
+D02AJF           8        D02EJF or D02NBF and related routines
+D02QAF          14        D02QFF, D02QWF and D02QXF
+D02QBF          13        D02NBF and related routines
+D02QDF          17        D02NBF or D02NCF
+D02QQF          17        not needed except with D02QDF
+D02XGF          14        D02QZF
+D02XHF          14        D02QZF
+D03PAF          17        D03PCF
+D03PBF          17        D03PCF
+D03PGF          17        D03PCF
+E01ACF          15        E01DAF and E02DEF
+E01ADF           9        E01BAF
+E02DBF          16        E02DEF
+E04AAF           7        E04ABF
+E04BAF           7        E04BBF
+E04CDF           7        E04UCF
+E04CEF           7        E04JAF
+E04CFF           8        E04UCF
+E04CGF          13        E04JAF
+E04DBF          13        E04DGF
+E04DCF           7        E04UCF or E04KDF
+E04DDF           8        E04UCF or E04KDF
+E04DEF          13        E04KAF
+E04DFF          13        E04KCF
+E04EAF           8        E04LBF
+E04EBF          13        E04LAF
+E04FAF           8        E04FCF or E04FDF
+E04FBF           7        E04FCF or E04FDF
+E04GAF           8        E04GBF, E04GCF, E04GDF or E04GEF
+E04HAF           7        E04UCF
+E04HBF          16        no longer required
+E04JBF          16        E04UCF
+E04KBF          16        E04UCF
+E04UAF          13        E04UCF
+E04VAF          12        E04UCF
+E04VBF          12        E04UCF
+E04VCF          17        E04UCF
+E04VDF          17        E04UCF
+E04WAF          12        E04UCF
+E04ZAF          12        E04ZCF
+E04ZBF          12        no longer required
+F01AAF          17        F07ADF (SGETRF/DGETRF) and F07AJF (SGETRI/DGETRI)
+F01ACF          16        F01ABF
+F01BFF           8        F07GDF (SPPTRF/DPPTRF) or F07PDF (SSPTRF/DSPTRF)
+F01BHF           9        F02WEF
+F01BJF           9        F08HEF (SSBTRD/DSBTRD)
+F01BKF           9        F02WDF
+F01BMF           9        F07BDF (SGBTRF/DGBTRF)
+F01BNF          17        F07FRF (CPOTRF/ZPOTRF)
+F01BPF          17        F07FRF (CPOTRF/ZPOTRF) and F07FWF (CPOTRI/ZPOTRI)
+F01BQF          16        F07GDF (SPPTRF/DPPTRF) or F07PDF (SSPTRF/DSPTRF)
+F01BXF          17        F07FDF (SPOTRF/DPOTRF)
+F01CAF          14        F06QHF
+F01CBF          14        F06QHF
+F01CCF           7        F06QFF
+F01CDF          15        F01CTF
+F01CEF          15        F01CTF
+F01CFF          14        F06QFF
+F01CGF          15        F01CTF
+F01CHF          15        F01CTF
+F01CJF           8        F01CRF
+F01CLF          16        F06YAF (SGEMM/DGEMM)
+F01CMF          14        F06QFF
+F01CNF          13        F06EFF (SCOPY/DCOPY)
+F01CPF          13        F06EFF (SCOPY/DCOPY)
+F01CQF          13        F06FBF
+F01CSF          13        F06PEF (SSPMV/DSPMV)
+F01DAF          13        F06EAF (SDOT/DDOT)
+F01DBF          13        X03AAF
+F01DCF          13        F06GAF (CDOTU/ZDOTU)
+F01DDF          13        X03ABF
+F01DEF          14        F06EAF (SDOT/DDOT)
+F01LZF          15        F08KEF (SGEBRD/DGEBRD) and F08KFF (SORGBR/DORGBR) or
+                                       F08KGF (SORMBR/DORMBR)
+F01NAF          17        F07BRF (CGBTRF/ZGBTRF)
+F01QAF          15        F08AEF (SGEQRF/DGEQRF)
+F01QBF          15        F01QJF
+F02AHF           8        F02ECF
+F02ALF           8        F02GCF
+F02ATF           8        F08PKF (SHSEIN/DHSEIN)
+F02AUF           8        F08PXF (CHSEIN/ZHSEIN)
+F02BMF           9        F08HEF (SSBTRD/DSBTRD) and F08JJF (SSTEBZ/DSTEBZ)
+F02SZF          15        F08MEF (SBDSQR/DBDSQR)
+F02WAF          16        F02WEF
+F02WBF          14        F02WEF
+F02WCF          14        F02WEF
+F03AGF          17        F07HDF (SPBTRF/DPBTRF)
+F03AHF          17        F07ARF (CGETRF/ZGETRF)
+F03AJF           8        F01BRF
+F03AKF           8        F01BSF
+F03ALF           9        F07BDF (SGBTRF/DGBTRF)
+F03AMF          17        none - see F03 Chapter Introduction
+F04AKF          17        F07ASF (CGETRS/ZGETRS)
+F04ALF          17        F07HEF (SPBTRS/DPBTRS)
+F04APF           8        F04AXF
+F04AQF          16        F07GEF (SPPTRS/DPPTRS) or F07PEF (SSPTRS/DSPTRS)
+F04AUF           9        F04JGF
+F04AVF           9        F07BEF (SGBTRS/DGBTRS)
+F04AWF          17        F07FSF (CPOTRS/ZPOTRS)
+F04AZF          17        F07FEF (SPOTRS/DPOTRS)
+F04NAF          17        F07BSF (CGBTRS/ZGBTRS)
+F05ABF          14        F06EJF (SNRM2/DNRM2)
+F06QGF          16        F06RAF, F06RCF and F06RJF
+F06VGF          16        F06UAF, F06UCF and F06UJF
+G01ACF           9        G04BBF
+G01BAF          16        G01EBF
+G01BBF          16        G01EDF
+G01BCF          16        G01ECF
+G01BDF          16        G01EEF
+G01CAF          16        G01FBF
+G01CBF          16        G01FDF
+G01CCF          16        G01FCF
+G01CDF          16        G01FEF
+G02CJF          16        G02DAF and G02DGF
+G04ADF          17        G04BBF
+G04AEF          17        G04BBF
+G04AFF          17        G04CAF
+G05AAF           7        G05CAF
+G05ABF           7        G05DAF
+G05ACF           7        G05DBF
+G05ADF           7        G05DDF
+G05AEF           7        G05DDF
+G05AFF           7        G05DEF
+G05AGF           7        G05DFF
+G05AHF           7        G05FFF
+G05AJF           7        G05FFF
+G05AKF           7        G05FFF
+G05ALF           7        G05FEF
+G05AMF           7        G05FEF
+G05ANF           7        G05DHF
+G05APF           7        G05DJF
+G05AQF           7        G05DKF
+G05ARF           7        G05EXF
+G05ASF           7        G05EDF
+G05ATF           7        G05EBF
+G05AUF           7        G05EFF
+G05AVF           7        G05ECF
+G05AWF           7        G05EXF
+G05AZF           7        G05EYF
+G05BAF           7        G05CBF
+G05BBF           7        G05CCF
+G05DGF          16        G05FFF
+G05DLF          16        G05FEF
+G05DMF          16        G05FEF
+G08ABF          16        G08AGF
+G08ADF          16        G08AHF, G08AKF and G08AJF
+G08CAF          16        G08CBF
+G13DAF          17        G13DMF
+H01ABF          12        E04MFF
+H01ADF          12        E04MFF
+H01AEF           9        E04MFF
+H01AFF          12        E04MFF
+H01BAF          12        E04MFF
+H02AAF          12        E04NCF
+H02BAF          15        H02BBF
+M01AAF          13        M01DAF
+M01ABF          13        M01DAF
+M01ACF          13        M01DBF
+M01ADF          13        M01DBF
+M01AEF          13        M01DEF and M01EAF
+M01AFF          13        M01DEF and M01EAF
+M01AGF          13        M01DFF and M01EBF
+M01AHF          13        M01DFF and M01EBF
+M01AJF          16        M01DAF, M01ZAF and M01CAF
+M01AKF          16        M01DAF, M01ZAF and M01CAF
+M01ALF          13        M01DBF, M01ZAF and M01CBF
+M01AMF          13        M01DBF, M01ZAF and M01CBF
+M01ANF          13        M01CAF
+M01APF          16        M01CAF
+M01AQF          13        M01CBF
+M01ARF          13        M01CBF
+M01BAF          13        M01CCF
+M01BBF          13        M01CCF
+M01BCF          13        M01CCF
+M01BDF          13        M01CCF
+P01AAF          13        P01ABF
+X02AAF          16        X02AJF
+X02ABF          16        X02AKF
+X02ACF          16        X02ALF
+X02ADF          14        X02AJF and X02AKF
+X02AEF          14        X02AMF
+X02AFF          14        X02AMF
+X02AGF          16        X02AMF
+X02BAF          14        X02BHF
+X02BCF          14        X02AMF
+X02BDF          14        X02AMF 
+X02CAF          17        not needed except with F01BTF and F01BXF
+
+If you need assistance in obtaining documentation of withdrawn routines,
+please contact your site representative. 

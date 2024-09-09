@@ -1,0 +1,69 @@
+#!/bin/sh
+#
+# Script runs an arbitrary set of example test programs.
+#   Script is run by typing:
+#
+#   runex options 'a* d01* e04m[fg]f'
+#
+#   arguments are between quotes (and may contain wildcards).
+#   options are positional (second is optional) :
+#      -n|-e|-b|-u : use NAG BLAS | ESSL BLAS | AIX BLAS | underscore appended
+#          -s      : use shared lib.
+#
+#
+CMDNAM=`basename $0`
+usage()
+{
+   echo "Usage : ./$CMDNAM options 'a* d01* e04m[fg]f'"
+   echo " options are positional (second is optional) :"
+   echo "    -n|-e|-b|-u : use NAG BLAS | ESSL BLAS | AIX BLAS | underscore appended"
+   echo "        -s      : use shared lib."
+   echo " arguments are names of routines for which the example will be run."
+   echo "           If specified between quotes they may contain wildcards."
+
+}
+. fortopts
+OPTIONS=$UNOPT
+#
+case $1 in
+   -n) resdir=newresults   ; libopt='-L ../.. -lnag' ;;
+   -b) resdir=newresults_b ; libopt='-lblas -L ../.. -lnag' ;;
+   -e) resdir=newresults_e ; libopt='-lessl -lblas -L ../.. -lnag' ;;
+   -u) resdir=newresults_u ; libopt='-L ../.. -lnag_u' ; SPECOPTS=-qextname ;;
+    *) usage ; exit
+esac
+shift
+if test $1 = -s
+then
+   resdir=${resdir}_sh
+   case $resdir in
+      newresults_sh|newresults_u_sh) libopt=${libopt}_sh ;;
+      newresults_b_sh) libopt='-lblas -L ../.. -lnag_b_sh' ;;
+      newresults_e_sh) libopt='-lessl -lblas -L ../.. -lnag_e_sh' ;;
+            *     ) ;
+   esac
+   shift
+fi
+#
+if [ ! -d ../examples/$resdir ]
+then
+  mkdir ../examples/$resdir
+fi
+cd ../examples/source
+while test "$1"
+do
+    for file in `ls ${1}e.f`
+    do 
+        datafile=`(echo $file | sed -e 's/f$/d/' -e 's/^/..\/data\//')`
+        resfile=`(echo $file | sed -e 's/f$/r/' -e "s/^/..\/$resdir\//")`
+        $F77 $OPTIONS $STD $SPECOPTS -o ${file}.out $file $libopt
+        if [ -f $datafile ]
+        then
+            ${file}.out < $datafile > $resfile 
+        else
+            ${file}.out > $resfile 
+        fi
+        rm ${file}.out
+    done
+    shift
+done

@@ -1,0 +1,3 @@
+G07DAF Example Program Data
+11           : N, NUMBER OF OBSERVATIONS
+13.0 11.0 16.0 5.0 3.0 18.0 9.0 8.0 6.0 27.0 7.0  : X, OBSERVATIONS

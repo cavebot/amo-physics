@@ -1,15 +1,9 @@
-#
-#
-# 092013: h2p.f90 is working. Eigenstates/vectors of h2+ are produced
-# 
-#
-#
 # 07062013: using acml library for blas/lapack
 #         : linking with openmp acml for h2eb.f90 (dsyevx lapack routine)
 #         :  
 #
 # todo:(May/2013)  
-#
+#   ~~~~~~~~~~~
 #    -- use only one parameter.2e.inc file throughout the package 
 #       allow bspci2e.f90 to write bspci2e.inc where the values of nl,np,... 
 #       are declared depending on the problem
@@ -23,7 +17,7 @@
 #    -- rewrite n2e.f in fortran90 
 #    
 #   compilers:
-#
+#   ~~~~~~~~~~~
 #   - implement two modes (debugging,optimization)
 #   - test code with: gfortran, intel, open64
 #   
@@ -51,11 +45,11 @@
 # local  dirs
 #
 TOP     = basis
-DIR     = ${PWD}/..
-BIN     = ../bin
-RUN     = ../run
-LIB     = ../lib
-SRC     = ${PWD}
+DIR     = ${PWD}
+BIN     = ./bin
+RUN     = ./run
+LIB     = ./lib
+SRC     = ${PWD}/src
 MOD     = ${SRC}
 LIBNAME = lib${TOP}.a
 LINK_LIB = ${LIB}/${LIBNAME} 
@@ -87,6 +81,8 @@ LOBJECTS  =   mod_precision.o   mod_units.o     mod_io.o     mod_netCDF.o \
 		     ykfct.o       sub_hf.o    mod_netCDF_new.o    
 #              sub_hf.o           ykfct.o   #used when the hf will be implemented   
 LSOURCES  = ${LOBJECTS:.o=.f}  
+LOBJECTS := $(patsubst %, $(SRC)/%, $(LOBJECTS))
+LSOURCES := $(patsubst %, $(SRC)/%, $(LSOURCES))
 LPRODUCT  = lib
 
 ############################## 
@@ -96,11 +92,7 @@ SOURCES1  = ${OBJECTS1:.o=.f90}
 LIBS1     = 
 PRODUCT1  = Rbspci2e
 #############################
-#
-#
-#                     h1e 
-#    
-#
+# h1e 
 ##############################
 POBJECTS2 = bs1e_parameter.o  mod_utils-v1.o \
             bs1e_modules.o    mod_data.o mod_types.o mod_h1e.o sub_hf.o h1e.o
@@ -334,11 +326,8 @@ SOURCES24  = ${OBJECTS24:.o=.f}
 LIBS24     = ${LINK_LIB} 
 PRODUCT24  = Rcs2e2ph_b
 
-
-#
-#          crmr
-#
-#
+###################################################
+# crmr
 ###################################################
 SOURCES25	= icsNph.f #subio_lopt.f 
 OBJECTS25 	= ${SOURCES25:.f=.o}
@@ -924,9 +913,9 @@ mpif90 = $(MPI) $(F90FLAGS) $(INCLUDE)  -c $<  -o $@
 %.o:%.C
 	${cc}
 %.o:%.f
-	${f90}
+	${f90} -J${SRC}
 %.o:%.f90
-	${f90}
+	${f90} -J${SRC}
 %.mpo:%.f90
 	${mpif90}
 
@@ -1092,9 +1081,9 @@ cleantdse:
 #	if test -e ${BIN}/$$f; then (echo "Makefile:: Removing $$f" ; rm ${BIN}/$$f)  fi ; \
 
 clean:  
-	rm -f *.o *.mod
+	rm -f ${SRC}/*.o ${SRC}/*.mod
 pclean:
-	rm -f *.mpo *.mod  
+	rm -f ${SRC}/*.mpo ${SRC}/*.mod  
 cleanlib:
 	rm -f ${LIB}/${LIBNAME}
 
