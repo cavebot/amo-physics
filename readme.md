@@ -165,7 +165,3 @@ main (bspci2e)  # (top directory)
     ├── tout    # (TDSE output files)
     └── log     # (log files)
 ```
-
----
-
-This Markdown format should make the document more organized and easier to read. You can copy and paste it directly into your Markdown file.
