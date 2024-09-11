@@ -1,7 +1,7 @@
 # 07062013: using acml library for blas/lapack
-#         : linking with openmp acml for h2eb.f90 (dsyevx lapack routine)
-#         :  
-#
+# linking with openmp acml for h2eb.f90 (dsyevx lapack routine)
+
+
 # todo:(May/2013)  
 #   ~~~~~~~~~~~
 #    -- use only one parameter.2e.inc file throughout the package 
@@ -15,64 +15,60 @@
 #    -- transform v2eb.f to v2eb.f90
 #    -- when using loops check for right_to_left execution of loops
 #    -- rewrite n2e.f in fortran90 
-#    
+    
 #   compilers:
 #   ~~~~~~~~~~~
 #   - implement two modes (debugging,optimization)
-#   - test code with: gfortran, intel, open64
-#   
-#
+#   - test code with: gfortran, intel, open64   
+
 #   parallelism:
 #   ~~~~~~~~~~~
 #   -- explore openmp parallelization in loops (v2eb.f90)
-#   
+   
 #    physics:
 #    ^^^^^^^^
 #    -- incorporate quantum dot potentials
 #    -- reconsider n2e.f90 normalization code
 #    -- include other model potentials as well
-#
-#    var:
-#   
-#   #  -- incorporating the 3e code in the Makefile?
-#
-#
-# 20102008/ transform of d2e.f (cpc/bspci2e v1 code) to h2eb.f90 (fortran 90)
-#           
-#
-#  Makefile bspci2e
-#
+
+# Todo
+# -- incorporating the 3e code in the Makefile?
+
+# 20102008/ transform of d2e.f (cpc/bspci2e v1 code) to h2eb.f90 (fortran 90)           
+
+# Makefile bspci2e
 # local  dirs
-#
-TOP     = basis
-DIR     = ${PWD}
-BIN     = ./bin
-RUN     = ./run
-LIB     = ./lib
-SRC     = ${PWD}/src
-MOD     = ${SRC}
-LIBNAME = lib${TOP}.a
+
+CMP=gnu  # Change to intel for intel compiler
+
+
+DIR    	 = ${shell pwd}
+SRC    	 = ${DIR}/src
+LIB    	 = ${DIR}/lib
+MOD      = ${SRC}
+BIN   	 = ${DIR}/bin
+
+TOP      = basis
+LIBNAME  = lib${TOP}.a
 LINK_LIB = ${LIB}/${LIBNAME} 
-#
-##  mpi  ##
-#
-MPI	   = mpif77
+
+# mpi  
+MPI	  	   = mpif77
 MPI_FC     = mpif77
 MPI_LINK   = mpif77
-#
 
-CMP=gnu
 ifeq ($(CMP),intel)
-include intel.cfg
+include ./compilers/intel.cfg
 else
-include gnu.cfg
+include ./compilers/gnu.cfg
 endif	
 
-##############################
+##########################################################################################
 MOBJECTS  = #${MOD}/mod_pad_utils.o
 MSOURCES  = #${MOBJECTS:.o=.f90} 
 MPRODUCT  = #mod
-##############################
+##########################################################################################
+
 LOBJECTS  =   mod_precision.o   mod_units.o     mod_io.o     mod_netCDF.o \
                bs_fr_1e_ang.o      anglib.o     mod_spherical_harmonics.o \
                modules_tdse.o   mod_field.o     \
@@ -85,483 +81,447 @@ LOBJECTS := $(patsubst %, $(SRC)/%, $(LOBJECTS))
 LSOURCES := $(patsubst %, $(SRC)/%, $(LSOURCES))
 LPRODUCT  = lib
 
-############################## 
-POBJECTS1 = bs1e_parameter.o  mod_kracken.o bspci2e.o
-OBJECTS1  = ${POBJECTS1:.o=.o}          #mpo 
-SOURCES1  = ${OBJECTS1:.o=.f90} 
+##########################################################################################
+POBJECTS1 = bs1e_parameter.o mod_kracken.o bspci2e.o
+OBJECTS1  = $(patsubst %, $(SRC)/%, ${POBJECTS1})
+SOURCES1  = ${OBJECTS1:.o=.f90}
 LIBS1     = 
 PRODUCT1  = Rbspci2e
-#############################
+##########################################################################################
 # h1e 
-##############################
-POBJECTS2 = bs1e_parameter.o  mod_utils-v1.o \
-            bs1e_modules.o    mod_data.o mod_types.o mod_h1e.o sub_hf.o h1e.o
-OBJECTS2 = ${POBJECTS2:.o=.o}          #mpo 
-SOURCES2 = ${OBJECTS2:.o=.f90} 
-LIBS2    = ${LINK_LIB} ${LINK_LAPACK} ${LINK_NAG17} ${LINK_SLATEC} 
-PRODUCT2 = Rh1e
-##############################
-POBJECTS2b = bsh2p_parameter.o  mod_utils-v1.o mod_qutils.o \
-             bs1e_modules.o mod_data.o h2p.o
-OBJECTS2b = ${POBJECTS2b:.o=.o}          #mpo 
-SOURCES2b = ${OBJECTS2b:.o=.f90} 
-LIBS2b    = ${LINK_LIB} ${LINK_LAPACK} ${LINK_NAG17} ${LINK_SLATEC} 
+##########################################################################################
+POBJECTS2 = bs1e_parameter.o mod_utils-v1.o bs1e_modules.o mod_data.o \
+            mod_types.o mod_h1e.o sub_hf.o h1e.o
+OBJECTS2  = $(patsubst %, $(SRC)/%, ${POBJECTS2})
+SOURCES2  = ${OBJECTS2:.o=.f90}
+LIBS2     = ${LINK_LIB} ${LINK_LAPACK} ${LINK_NAG17} ${LINK_SLATEC}
+PRODUCT2  = Rh1e
+##########################################################################################
+POBJECTS2b = bsh2p_parameter.o mod_utils-v1.o mod_qutils.o bs1e_modules.o \
+             mod_data.o h2p.o
+OBJECTS2b = $(patsubst %, $(SRC)/%, ${POBJECTS2b})
+SOURCES2b = ${OBJECTS2b:.o=.f90}
+LIBS2b    = ${LINK_LIB} ${LINK_LAPACK} ${LINK_NAG17} ${LINK_SLATEC}
 PRODUCT2b = Rh2p
-##########
-POBJECTS3 = bs1e_parameter.o   mod_utils-v1.o \
-            bs1e_modules.o mod_data.o  mod_types.o  mod_w1e.o w1e.o 
-OBJECTS3 = ${POBJECTS3:.o=.o}          #mpo 
-SOURCES3 = ${OBJECTS3:.o=.f90} 
-LIBS3    = ${LINK_LIB} ${LINK_LAPACK} ${LINK_NAG17} ${LINK_SLATEC} 
-PRODUCT3 = Rw1e
-##########
-POBJECTS3a = bs1e_parameter.o   mod_utils-v1.o \
-            bs1e_modules.o mod_data.o  mod_types.o  mod_w1e_adam.o w1e_adam.o 
-OBJECTS3a = ${POBJECTS3a:.o=.o}          #mpo 
-SOURCES3a = ${OBJECTS3a:.o=.f90} 
-LIBS3a    = ${LINK_LIB} ${LINK_LAPACK} ${LINK_NAG17} ${LINK_SLATEC} 
+##########################################################################################
+POBJECTS3 = bs1e_parameter.o mod_utils-v1.o bs1e_modules.o mod_data.o \
+            mod_types.o mod_w1e.o w1e.o
+OBJECTS3  = $(patsubst %, $(SRC)/%, ${POBJECTS3})
+SOURCES3  = ${OBJECTS3:.o=.f90}
+LIBS3     = ${LINK_LIB} ${LINK_LAPACK} ${LINK_NAG17} ${LINK_SLATEC}
+PRODUCT3  = Rw1e
+##########################################################################################
+POBJECTS3a = bs1e_parameter.o mod_utils-v1.o bs1e_modules.o mod_data.o \
+             mod_types.o mod_w1e_adam.o w1e_adam.o
+OBJECTS3a = $(patsubst %, $(SRC)/%, ${POBJECTS3a})
+SOURCES3a = ${OBJECTS3a:.o=.f90}
+LIBS3a    = ${LINK_LIB} ${LINK_LAPACK} ${LINK_NAG17} ${LINK_SLATEC}
 PRODUCT3a = Rw1e_adam
-#
-# slatec here is only needed because dbvalu is used in h1e. (Move dbvalue in
-# other module than bs1e_modules.f90
-#
-#
-################################################
-#
-#      h2e (fxd boundary conditions)
-#
-#
-################################################
-POBJECTS4 = v2eb.o subiob.o rinfxdb.o ykfctb.o angb.o  subv2eb.o 
-OBJECTS4  = ${POBJECTS4:.o=.o}          #mpo 
-SOURCES4  = ${OBJECTS4:.o=.f} 
-LIBS4     = ${LINK_LIB} 
+# slatec here is only needed because dbvalu is used in h1e. (Move dbvalue into
+# anotherother module than bs1e_modules.f90
+
+
+##########################################################################################
+# h2e fixed (fxd) boundary conditions
+##########################################################################################
+POBJECTS4 = v2eb.o subiob.o rinfxdb.o ykfctb.o angb.o subv2eb.o
+OBJECTS4  = $(patsubst %, $(SRC)/%, ${POBJECTS4})
+SOURCES4  = ${OBJECTS4:.o=.f}
+LIBS4     = ${LINK_LIB}
 PRODUCT4  = Rv2eb
-##
-POBJECTS4b = v12.o subiov12.o rinfxdb.o ykfctb.o angb.o  subv12.o 
-OBJECTS4b  = ${POBJECTS4b:.o=.o}          #mpo 
-SOURCES4b  = ${OBJECTS4b:.o=.f} 
-LIBS4b     = ${LINK_LIB} 
-PRODUCT4b  = Rv12
-###########
-#
+##########################################################################################
+POBJECTS4b = v12.o subiov12.o rinfxdb.o ykfctb.o angb.o subv12.o
+OBJECTS4b = $(patsubst %, $(SRC)/%, ${POBJECTS4b})
+SOURCES4b = ${OBJECTS4b:.o=.f}
+LIBS4b    = ${LINK_LIB}
+PRODUCT4b = Rv12
+##########################################################################################
 # 23.10.2008: trying to convert to f90 (not completed)
-#
-POBJECTS4a = mod_w2e_r12.o modio.o mod_bs_frb_2e.o r12.o  
-OBJECTS4a  = ${POBJECTS4a:.o=.o}          #mpo 
-SOURCES4a  = ${OBJECTS4a:.o=.f90} 
-LIBS4a     = ${LINK_LIB} 
+
+POBJECTS4a = mod_w2e_r12.o modio.o mod_bs_frb_2e.o r12.o
+OBJECTS4a  = $(patsubst %, $(SRC)/%, ${POBJECTS4a})
+SOURCES4a  = ${OBJECTS4a:.o=.f90}
+LIBS4a     = ${LINK_LIB}
 PRODUCT4a  = Rr12b
-###########
-#
+##########################################################################################
 # 20.10.2008: transform old d2e.f (bspci2e/cpc/h2eb.f) from f77 to fortran 90.
-#
-#
-POBJECTS5 = mod_w2e.o  h2eb.o                 #h2eb_old.o  #subio.o
-OBJECTS5  = ${POBJECTS5:.o=.o}        #mpo 
-SOURCES5  = ${OBJECTS5:.o=.f90} 
-LIBS5     = ${LINK_LIB} ${LINK_LAPACK} #${LINK_ACML_MP}  
+
+POBJECTS5 = mod_w2e.o h2eb.o                 #h2eb_old.o  #subio.o
+OBJECTS5  = $(patsubst %, $(SRC)/%, ${POBJECTS5})
+SOURCES5  = ${OBJECTS5:.o=.f90}
+LIBS5     = ${LINK_LIB} ${LINK_LAPACK} #${LINK_ACML_MP}
 PRODUCT5  = Rh2eb
-###########
+##########################################################################################
 #QUB25102008LAAN: transform of old (bspci2e/cpc/wf2e.f) from f77 to fortran 90
-#
-#
+
 POBJECTS6 = w2eb.o                     #subio.o
-OBJECTS6  = ${POBJECTS6:.o=.o}         #mpo 
-SOURCES6  = ${OBJECTS6:.o=.f90} 
-LIBS6     = ${LINK_LIB} 
+OBJECTS6  = $(patsubst %, $(SRC)/%, ${POBJECTS6})
+SOURCES6  = ${OBJECTS6:.o=.f90}
+LIBS6     = ${LINK_LIB}
 PRODUCT6  = Rw2eb
-##########
+##########################################################################################
 POBJECTS7 = d2eb.o subd2eb.o         #subio.o
-OBJECTS7  = ${POBJECTS7:.o=.o}         #mpo 
-SOURCES7  = ${OBJECTS7:.o=.f} 
-LIBS7     = ${LINK_LIB} ${LINK_LAPACK} ${LINK_BLAS} 
+OBJECTS7  = $(patsubst %, $(SRC)/%, ${POBJECTS7})
+SOURCES7  = ${OBJECTS7:.o=.f}
+LIBS7     = ${LINK_LIB} ${LINK_LAPACK} ${LINK_BLAS}
 PRODUCT7  = Rd2eb
-##########
-POBJECTS8 = mod_hnorm_io.o mod_hnorm_wf1e.o mod_hnorm_param.o hnorm.o   
-OBJECTS8  = ${POBJECTS8:.o=.o}         #mpo 
-SOURCES8  = ${OBJECTS8:.o=.f90} 
-LIBS8     = ${LINK_LIB} 
+##########################################################################################
+POBJECTS8 = mod_hnorm_io.o mod_hnorm_wf1e.o mod_hnorm_param.o hnorm.o
+OBJECTS8  = $(patsubst %, $(SRC)/%, ${POBJECTS8})
+SOURCES8  = ${OBJECTS8:.o=.f90}
+LIBS8     = ${LINK_LIB}
 PRODUCT8  = Rhnorm
-##########
-#
+##########################################################################################
 #23.10.2008: included in the package
-#          - old names: norm2e.f subnorm2e.
-#          - grid.f (needed by norm2e.f) 
-#          
-#
-POBJECTS9 = subio.o rinfxdb.o subn2eb.o n2eb.o          #subio.o rinfxdb.o ykfctb.o angb.o  subv2eb.o 
-OBJECTS9  = ${POBJECTS9:.o=.o}         #mpo 
+# old names: norm2e.f subnorm2e.
+#	 grid.f (needed by norm2e.f) 
+          
+POBJECTS9 = subio.o rinfxdb.o subn2eb.o n2eb.o #subio.o rinfxdb.o ykfctb.o angb.o subv2eb.o 
+OBJECTS9  = $(patsubst %, $(SRC)/%, ${POBJECTS9})
 SOURCES9  = ${OBJECTS9:.o=.f} 
 LIBS9     = #${LINK_LIB} 
 PRODUCT9  = Rn2eb
-###########
+##########################################################################################
 POBJECTS10 = ncf.o  #mod_netCDF.o    #subio.o mod_netCDF.o 
-OBJECTS10  = ${POBJECTS10:.o=.o}         #mpo 
+OBJECTS10  = $(patsubst %, $(SRC)/%, ${POBJECTS10})
 SOURCES10  = ${OBJECTS10:.o=.f90} 
 LIBS10     = ${LINK_LIB} ${LINK_NETCDF_F} 
 PRODUCT10  = Rncf
-##########
-#
+##########################################################################################
 # test new mod_netCDF file
-#
+
 POBJECTS10a = ncf_new.o  #mod_netCDF_new.o    #subio.o mod_netCDF.o 
-OBJECTS10a  = ${POBJECTS10a:.o=.o}         #mpo 
+OBJECTS10a  = $(patsubst %, $(SRC)/%, ${POBJECTS10a})
 SOURCES10a  = ${OBJECTS10a:.o=.f90} 
 LIBS10a     = ${LINK_LIB} ${LINK_NETCDF_F} 
 PRODUCT10a  = Rncf_new
-##########
+##########################################################################################
 
 
-#
-#
-#                 h2e (free-boundary conditions)
-#
-#
+##########################################################################################
+# h2e free-boundary conditions
+##########################################################################################
 
-
-#################################################
 POBJECTS14 = v2e.o subv2e.o v2e_ykfct.o 
-OBJECTS14  = ${POBJECTS14:.o=.o} #mpo 
+OBJECTS14  = $(patsubst %, $(SRC)/%, ${POBJECTS14})
 SOURCES14  = ${OBJECTS14:.o=.f} 
 LIBS14     = ${LINK_LIB}
 PRODUCT14  = Rv2ef
-############
-POBJECTS15 = mod_utils.o  modio.o  mod_bs_frb_2e.o mod_h2e.o h2e.o  
-OBJECTS15  = ${POBJECTS15:.o=.o} #mpo 
+##########################################################################################
+POBJECTS15 = mod_utils.o modio.o mod_bs_frb_2e.o mod_h2e.o h2e.o  
+OBJECTS15  = $(patsubst %, $(SRC)/%, ${POBJECTS15})
 SOURCES15  = ${OBJECTS15:.o=.f90} 
 LIBS15     = ${LINK_LIB} ${LINK_LAPACK} ${LINK_BLAS}
 PRODUCT15  = Rh2ef
-############
+##########################################################################################
 POBJECTS16 = mod_utils.o modules_tise.o modio.o mod_bs_frb_2e.o mod_k2e.o k2e.o
-OBJECTS16  = ${POBJECTS16:.o=.o} #mpo 
+OBJECTS16  = $(patsubst %, $(SRC)/%, ${POBJECTS16})
 SOURCES16  = ${OBJECTS16:.o=.f90} 
 LIBS16     = ${LINK_LIB} ${LINK_LAPACK} ${LINK_BLAS} 
 PRODUCT16  = Rk2ef
-############
+##########################################################################################
 POBJECTS17b = modio.o mod_utils.o mod_d2ebf.o subhdmx2e.o d2ebf.o 
-OBJECTS17b  = ${POBJECTS17b:.o=.o}       #mpo 
+OBJECTS17b  = $(patsubst %, $(SRC)/%, ${POBJECTS17b})
 SOURCES17b  = ${OBJECTS17b:.o=.f90} 
 LIBS17b     = ${LINK_LIB} ${LINK_BLAS} 
 PRODUCT17b  = Rd2ebf
-############
+##########################################################################################
 POBJECTS17 = modio.o mod_utils.o mod_dmx2ebf.o subhdmx2e.o dmx2ebf.o 
-OBJECTS17  = ${POBJECTS17:.o=.o}       #mpo 
+OBJECTS17  = $(patsubst %, $(SRC)/%, ${POBJECTS17})
 SOURCES17  = ${OBJECTS17:.o=.f90} 
 LIBS17     = ${LINK_LIB} ${LINK_BLAS} 
 PRODUCT17  = Rdmx2ebf
-############
-POBJECTS18 = modio.o   mod_dmx2eff.o subhdmx2e.o dmx2eff.o
-OBJECTS18  = ${POBJECTS18:.o=.o}                                #mpo 
+##########################################################################################
+POBJECTS18 = modio.o mod_dmx2eff.o subhdmx2e.o dmx2eff.o
+OBJECTS18  = $(patsubst %, $(SRC)/%, ${POBJECTS18})
 SOURCES18  = ${OBJECTS18:.o=.f90} 
 LIBS18     = ${LINK_LIB} ${LINK_BLAS} 
 PRODUCT18  = Rd2eff
-############
+##########################################################################################
 POBJECTS19 = modio.o ndmx2ebf.o 
-OBJECTS19  = ${POBJECTS19:.o=.o} #mpo 
+OBJECTS19  = $(patsubst %, $(SRC)/%, ${POBJECTS19})
 SOURCES19  = ${OBJECTS19:.o=.f90} 
 LIBS19     = ${LINK_LIB} ${LINK_LAPACK} ${LINK_BLAS} 
 PRODUCT19  = Rn2ebf
-############
+##########################################################################################
 POBJECTS20 = modio.o ndmx2eff.o 
-OBJECTS20  = ${POBJECTS20:.o=.o}                #mpo 
+OBJECTS20  = $(patsubst %, $(SRC)/%, ${POBJECTS20})
 SOURCES20  = ${OBJECTS20:.o=.f90} 
 LIBS20     = ${LINK_LIB} ${LINK_LAPACK} ${LINK_BLAS} 
 PRODUCT20  = Rn2eff
-###########################################################
+##########################################################################################
 
 
+##########################################################################################
+# LOPT 
+##########################################################################################
 
-
-#
-#
-#              LOPT 
-#
-
-
-
-#
+##########################################################################################
 # single photon cross section (multichannel code)
-#
-#
+##########################################################################################
+
 
 POBJECTS21 = modio.o cs1ph.o 
-OBJECTS21  = ${POBJECTS21:.o=.o}          #mpo 
+OBJECTS21  = $(patsubst %, $(SRC)/%, ${POBJECTS21})
 SOURCES21  = ${OBJECTS21:.o=.f90} 
 LIBS21     = ${LINK_LIB}
 PRODUCT21  = Rc2e1
 
-##############################
-#
-#
+##########################################################################################
 # 2-photo cross sections (multichannel code)
-#
-#
+##########################################################################################
+
 POBJECTS22 = modio.o cs2ph.o
-OBJECTS22  = ${POBJECTS22:.o=.o}          #mpo 
+OBJECTS22  = $(patsubst %, $(SRC)/%, ${POBJECTS22})
 SOURCES22  = ${OBJECTS22:.o=.f90} 
-LIBS22     = ${LINK_LIB} ${LINK_LAPACK}  ${LINK_BLAS} 
+LIBS22     = ${LINK_LIB} ${LINK_LAPACK} ${LINK_BLAS} 
 PRODUCT22  = Rc2e2
-##############################
-#
+
+##########################################################################################
 # single photon cross section (fxd code)
-#
-#
+##########################################################################################
+
 POBJECTS23 = modio.o cs2e1ph_b.o 
-OBJECTS23  = ${POBJECTS23:.o=.o}          #mpo 
+OBJECTS23  = $(patsubst %, $(SRC)/%, ${POBJECTS23})
 SOURCES23  = ${OBJECTS23:.o=.f} 
 LIBS23     = ${LINK_LIB}
 PRODUCT23  = Rcs2e1ph_b
-##############################
-#
-#
-#             2-photo cross sections (fxd code)
-#
-#
 
+###########################################################################################
+# 2-photo cross sections (fxd code)
+##########################################################################################
 
 POBJECTS24 = modio.o cs2e2ph_b.o
-OBJECTS24  = ${POBJECTS24:.o=.o}          #mpo 
+OBJECTS24  = $(patsubst %, $(SRC)/%, ${POBJECTS24})
 SOURCES24  = ${OBJECTS24:.o=.f} 
 LIBS24     = ${LINK_LIB} 
 PRODUCT24  = Rcs2e2ph_b
 
-###################################################
+##########################################################################################
 # crmr
-###################################################
+##########################################################################################
 SOURCES25	= icsNph.f #subio_lopt.f 
-OBJECTS25 	= ${SOURCES25:.f=.o}
+OBJECTS25 	= $(patsubst %, $(SRC)/%, ${SOURCES25:.f=.o})
 PRODUCT25	= RcsNph_i
 LIBS25   	= ${LINK_LIB}
-###################################################
-#   lopt package
-SOURCES26	= csNph.f  subcsNph.f 
-OBJECTS26 	= ${SOURCES26:.f=.o} 
+
+##########################################################################################
+SOURCES26	= csNph.f subcsNph.f 
+OBJECTS26 	= $(patsubst %, $(SRC)/%, ${SOURCES26:.f=.o}) 
 PRODUCT26	= RcsNph_l   
 LIBS26   	= ${LINK_BLAS}
-##################################################
-#   lopt package
+
+##########################################################################################
 SOURCES27	= csNph_merge_r.f90 
-OBJECTS27 	= ${SOURCES27:.f90=.o} 
+OBJECTS27 	= $(patsubst %, $(SRC)/%, ${SOURCES27:.f90=.o}) 
 PRODUCT27	= RcsNph_merge_r   
 LIBS27  	= ${LINK_SLATEC} 
-#
-##################################################
-#   lopt package
-SOURCES28	= mod_precision.f90  mod_units.f90 \
-	           mod_ang_lopt.f90 mod_utils_lopt.f90  csNph_total.f90  
-OBJECTS28 	= ${SOURCES28:.f90=.o} 
+
+##########################################################################################
+SOURCES28	= mod_precision.f90 mod_units.f90 mod_ang_lopt.f90 mod_utils_lopt.f90 csNph_total.f90  
+OBJECTS28 	= $(patsubst %, $(SRC)/%, ${SOURCES28:.f90=.o}) 
 PRODUCT28	= RcsNph_t
 LIBS28   	= 
-####################################
+
+##########################################################################################
 SOURCES29a	= stark.f 
-OBJECTS29a 	= ${SOURCES29a:.f=.o}
+OBJECTS29a 	= $(patsubst %, $(SRC)/%, ${SOURCES29a:.f=.o})
 PRODUCT29a	= Rstark
 LIBS29a   	= 
-####################################
+
+##########################################################################################
 SOURCES29b	= shift.f
-OBJECTS29b 	= ${SOURCES29b:.f=.o} 
+OBJECTS29b 	= $(patsubst %, $(SRC)/%, ${SOURCES29b:.f=.o}) 
 PRODUCT29b	= Rshift
 LIBS29b   	= 
-####################################
+##########################################################################################
 
-#
-#
-#
+
+
+##########################################################################################
 #                            tdse-2e
-#  
-#
-#
+##########################################################################################
 
 POBJECTS30 = mod_dynamic_array.o mod_field.o mod_utils.o \
-	          mod_tdse_bs.o  subtdse_bs.o tdse_bs_temp.o 
-OBJECTS30 = ${POBJECTS30:.o=.o} #mpo 
-SOURCES30 = ${OBJECTS30:.o=.f90} 
-LIBS30    = ${LINK_LAPACK} ${LINK_BLAS}  ${LINK_NAG17}  ${LINK_LIB} ${LINK_NETCDF_F} 
+              mod_tdse_bs.o subtdse_bs.o tdse_bs_temp.o 
+OBJECTS30  = $(patsubst %, $(SRC)/%, ${POBJECTS30})
+SOURCES30  = ${OBJECTS30:.o=.f90} 
+LIBS30     = ${LINK_LAPACK} ${LINK_BLAS} ${LINK_NAG17} ${LINK_LIB} ${LINK_NETCDF_F} 
 PROFFLAG30 = -Wmaybe-uninitialized 
 #${LINK_ODE}
-PRODUCT30 = Rtdse_bs
-########
+PRODUCT30  = Rtdse_bs
+
+##########################################################################################
 POBJECTS30a = mod_tdse_bs.o tdse_bs_pes.o 
-OBJECTS30a = ${POBJECTS30a:.o=.o} #mpo
-SOURCES30a = ${OBJECTS30a:.o=.f90} 
-LIBS30a    = ${LINK_LIB} ${LINK_NETCDF_F} 
-PRODUCT30a = Rtdse_bs_pes
-########
+OBJECTS30a  = $(patsubst %, $(SRC)/%, ${POBJECTS30a})
+SOURCES30a  = ${OBJECTS30a:.o=.f90} 
+LIBS30a     = ${LINK_LIB} ${LINK_NETCDF_F} 
+PRODUCT30a  = Rtdse_bs_pes
+##########################################################################################
 POBJECTS30b = mod_tdse_bs.o tdse_bs_pes.o #tdse_bs_hhg.o (change to hhg file when you find this file)
-OBJECTS30b = ${POBJECTS30b:.o=.o} #mpo 
-SOURCES30b = $ {OBJECTS30b:.o=.f90} 
-LIBS30b    = ${LINK_LIB} ${LINK_NAG17} ${LINK_NETCDF_F}
-PRODUCT30b = Rtdse_hhg
-########
+OBJECTS30b  = $(patsubst %, $(SRC)/%, ${POBJECTS30b})
+SOURCES30b  = ${OBJECTS30b:.o=.f90} 
+LIBS30b     = ${LINK_LIB} ${LINK_NAG17} ${LINK_NETCDF_F}
+PRODUCT30b  = Rtdse_hhg
+##########################################################################################
 POBJECTS30c = modio.o\
              bs1e_parameter.o mod_utils-v1.o mod_bs_frb_2e.o \
              mod_tdse_bs.o mod_tdse_bs_pop2.o tdse_bs_pop_timetrace.o
-OBJECTS30c = ${POBJECTS30c:.o=.o} #mpo 
-SOURCES30c = $ {OBJECTS30c:.o=.f90} 
-LIBS30c    = ${LINK_LIB} ${LINK_NAG17} ${LINK_NETCDF_F}
-PRODUCT30c = Rtdse_bs_pop_timetrace
-###################################
+OBJECTS30c  = $(patsubst %, $(SRC)/%, ${POBJECTS30c})
+SOURCES30c  = ${OBJECTS30c:.o=.f90} 
+LIBS30c     = ${LINK_LIB} ${LINK_NAG17} ${LINK_NETCDF_F}
+PRODUCT30c  = Rtdse_bs_pop_timetrace
+##########################################################################################
 POBJECTS30d = modio.o\
              bs1e_parameter.o mod_utils-v1.o mod_bs_frb_2e.o \
              mod_tdse_bs.o tdse_bs_pop_v0.o
-OBJECTS30d = ${POBJECTS30d:.o=.o} #mpo 
-SOURCES30d = $ {OBJECTS30d:.o=.f90} 
-LIBS30d    = ${LINK_LIB} ${LINK_NAG17} ${LINK_NETCDF_F}
-PRODUCT30d = Rtdse_bs_pop_v0
-###################################
+OBJECTS30d  = $(patsubst %, $(SRC)/%, ${POBJECTS30d})
+SOURCES30d  = ${OBJECTS30d:.o=.f90} 
+LIBS30d     = ${LINK_LIB} ${LINK_NAG17} ${LINK_NETCDF_F}
+PRODUCT30d  = Rtdse_bs_pop_v0
+##########################################################################################
 POBJECTS31 = subtdse_bs_frb_2e_cos_s.o tdse_bs_frb_2e_cos_s.o
-OBJECTS31 = ${POBJECTS31:.o=.o} #mpo 
-SOURCES31 = ${OBJECTS31:.o=.f90} 
-LIBS31    = ${LINK_LIB} ${LINK_LAPACK} ${LINK_BLAS} ${LINK_NAG17} 
-PRODUCT31 = Rtdse_bs_frb_2e_cos_s
-############ (double-cos)
+OBJECTS31  = $(patsubst %, $(SRC)/%, ${POBJECTS31})
+SOURCES31  = ${OBJECTS31:.o=.f90} 
+LIBS31     = ${LINK_LIB} ${LINK_LAPACK} ${LINK_BLAS} ${LINK_NAG17} 
+PRODUCT31  = Rtdse_bs_frb_2e_cos_s
+# (double-cos)
+##########################################################################################
 POBJECTS32 = subtdse_bs_frb_2e.o tdse_bs_frb_2e.o 
-OBJECTS32 = ${POBJECTS32:.o=.o} #mpo 
-SOURCES32 = ${OBJECTS32:.o=.f90} 
-LIBS32    = ${LINK_LIB} ${LINK_LAPACK} ${LINK_BLAS} ${LINK_NAG17} 
-PRODUCT32 = Rtdse_bs_frb_2e #Rtdse_bs_frb_2e
-##########
+OBJECTS32  = $(patsubst %, $(SRC)/%, ${POBJECTS32})
+SOURCES32  = ${OBJECTS32:.o=.f90} 
+LIBS32     = ${LINK_LIB} ${LINK_LAPACK} ${LINK_BLAS} ${LINK_NAG17} 
+PRODUCT32  = Rtdse_bs_frb_2e #Rtdse_bs_frb_2e
+##########################################################################################
 POBJECTS32a = subtdse_bs_frb_2e_ramp_d.o tdse_bs_frb_2e_ramp_d.o 
-OBJECTS32a = ${POBJECTS32a:.o=.o} #mpo 
-SOURCES32a = ${OBJECTS32a:.o=.f90} 
-LIBS32a    = ${LINK_LIB} ${LINK_LAPACK} ${LINK_BLAS} ${LINK_NAG17} 
-PRODUCT32a = Rtdse_bs_frb_ramp_d
-#########
+OBJECTS32a  = $(patsubst %, $(SRC)/%, ${POBJECTS32a})
+SOURCES32a  = ${OBJECTS32a:.o=.f90} 
+LIBS32a     = ${LINK_LIB} ${LINK_LAPACK} ${LINK_BLAS} ${LINK_NAG17} 
+PRODUCT32a  = Rtdse_bs_frb_ramp_d
+##########################################################################################
 POBJECTS33 = subtdse_bs_frb_2e_pad.o tdse_bs_frb_2e_pad.o 
-OBJECTS33 = ${POBJECTS33:.o=.o} #mpo 
-SOURCES33 = ${OBJECTS33:.o=.f90} 
-LIBS33    = ${LINK_LIB} 
-PRODUCT33 = Rpad
-############
+OBJECTS33  = $(patsubst %, $(SRC)/%, ${POBJECTS33})
+SOURCES33  = ${OBJECTS33:.o=.f90} 
+LIBS33     = ${LINK_LIB} 
+PRODUCT33  = Rpad
+##########################################################################################
 POBJECTS34 = tdse_bs_frb_2e_read_dmx.o
-OBJECTS34 = ${POBJECTS34:.o=.o} #mpo 
-SOURCES34 = ${OBJECTS34:.o=.f90} 
-LIBS34    = ${LINK_LIB} 
-PRODUCT34 = Rtdse_bs_frb_2e_read_dmx
-#######
+OBJECTS34  = $(patsubst %, $(SRC)/%, ${POBJECTS34})
+SOURCES34  = ${OBJECTS34:.o=.f90} 
+LIBS34     = ${LINK_LIB} 
+PRODUCT34  = Rtdse_bs_frb_2e_read_dmx
+##########################################################################################
 POBJECTS35 = tdse_bs_fxd_2e_read_coe.o #tdse_bs_frb_2e_read_coe.o
-OBJECTS35 = ${POBJECTS35:.o=.o} #mpo 
-SOURCES35 = ${OBJECTS35:.o=.f90} 
-LIBS35    = ${LINK_LIB} 
-PRODUCT35 = Rtdse_bs_fxd_read_coe
-#######
+OBJECTS35  = $(patsubst %, $(SRC)/%, ${POBJECTS35})
+SOURCES35  = ${OBJECTS35:.o=.f90} 
+LIBS35     = ${LINK_LIB} 
+PRODUCT35  = Rtdse_bs_fxd_read_coe
+##########################################################################################
 POBJECTS36 = pcolor.o
-OBJECTS36 = ${POBJECTS36:.o=.o} 
-SOURCES36 = ${OBJECTS36:.o=.f90} 
-LIBS36    = ${LINK_LIB}
-PRODUCT36 = Rpcolor
-#######
-POBJECTS37 = mod_precision.o bs1e_parameter.o   mod_utils-v1.o mod_bs_frb_2e.o\
+OBJECTS36  = $(patsubst %, $(SRC)/%, ${POBJECTS36})
+SOURCES36  = ${OBJECTS36:.o=.f90} 
+LIBS36     = ${LINK_LIB}
+PRODUCT36  = Rpcolor
+##########################################################################################
+POBJECTS37 = mod_precision.o bs1e_parameter.o mod_utils-v1.o mod_bs_frb_2e.o\
             mod_tdse_bs.o mod_tdse_bs_pop2.o rd2e_double_ionisation_total.o
-OBJECTS37 = ${POBJECTS37:.o=.o}           
-SOURCES37 = ${OBJECTS37:.o=.f90} 
-LIBS37    = ${LINK_LIB} ${LINK_LAPACK} ${LINK_NAG17} ${LINK_SLATEC} ${LINK_NETCDF_F} -fopenmp
-PRODUCT37 = rd2e_double_ionisation_total
-###################################################  (parallel) (spse)
-POBJECTS37a = mod_precision.o bs1e_parameter.o   mod_utils-v1.o mod_bs_frb_2e.o\
-            mod_tdse_bs.o mod_tdse_bs_pop2.o mod_field.o rd2e_partial_wave_double_ionisation.o
-OBJECTS37a = ${POBJECTS37a:.o=.o}          
-SOURCES37a = ${OBJECTS37a:.o=.f90} 
-LIBS37a    = ${LINK_LIB} ${LINK_LAPACK} ${LINK_NAG17} ${LINK_SLATEC} ${LINK_NETCDF_F} -fopenmp
-PRODUCT37a = rd2e_partial_wave_double_ionisation_t
-#############################
-POBJECTS37b = mod_precision.o bs1e_parameter.o  mod_spherical_harmonics.o anglib.o mod_utils-v1.o mod_bs_frb_2e.o\
-            mod_tdse_bs.o mod_tdse_bs_pop2.o mod_core_phase_shift.o subtdse_bs_frb_2e_pad.o pad2e.o
-OBJECTS37b = ${POBJECTS37b:.o=.o}          
-SOURCES37b = ${OBJECTS37b:.o=.f90} 
-LIBS37b    = ${LINK_LIB} ${LINK_LAPACK} ${LINK_NAG17} ${LINK_SLATEC} ${LINK_NETCDF_F} -fopenmp
-PRODUCT37b = pad2e
-##############################
-POBJECTS37c = mod_w2e.o mod_precision.o bs1e_parameter.o mod_utils-v1.o mod_bs_frb_2e.o\
-            mod_tdse_bs.o mod_tdse_bs_pop2.o v12t.o
-OBJECTS37c = ${POBJECTS37c:.o=.o}          
-SOURCES37c = ${OBJECTS37c:.o=.f90} 
-LIBS37c    = ${LINK_LIB} ${LINK_LAPACK} ${LINK_NAG17} ${LINK_SLATEC} ${LINK_NETCDF_F} -fopenmp
-PRODUCT37c = Rv12t
-##############################
-POBJECTS37d = mod_w2e.o mod_precision.o bs1e_parameter.o mod_utils-v1.o mod_bs_frb_2e.o\
-            mod_tdse_bs.o mod_tdse_bs_pop2.o enlnl.o
-OBJECTS37d = ${POBJECTS37d:.o=.o}          
-SOURCES37d = ${OBJECTS37d:.o=.f90} 
-LIBS37d    = ${LINK_LIB} ${LINK_LAPACK} ${LINK_NAG17} ${LINK_SLATEC} ${LINK_NETCDF_F} -fopenmp
-PRODUCT37d = Renlnl
-######################## write a test bessel function to a file
-POBJECTS38 = mod_precision.o bs1e_parameter.o  mod_spherical_harmonics.o anglib.o mod_utils-v1.o mod_bs_frb_2e.o\
-            mod_tdse_bs.o mod_tdse_bs_pop.o bessel_print.o
-OBJECTS38 = ${POBJECTS38:.o=.o}         
-SOURCES38 = ${OBJECTS38:.o=.f90} 
-LIBS38    = ${LINK_LIB} ${LINK_LAPACK} ${LINK_NAG17} ${LINK_SLATEC} ${LINK_NETCDF_F} -fopenmp
-PRODUCT38 = bessel_print
-######################## Seperate radial wf file for given l into individual files
-POBJECTS38a = mod_precision.o bs1e_parameter.o  mod_spherical_harmonics.o anglib.o mod_utils-v1.o mod_bs_frb_2e.o\
-            mod_tdse_bs.o mod_tdse_bs_pop.o radial_function_separator.o
-OBJECTS38a = ${POBJECTS38a:.o=.o}         
-SOURCES38a = ${OBJECTS38a:.o=.f90} 
-LIBS38a    = ${LINK_LIB} ${LINK_LAPACK} ${LINK_NAG17} ${LINK_SLATEC} ${LINK_NETCDF_F} -fopenmp
-PRODUCT38a = radial_separator
-##############################
-POBJECTS37e = mod_w2e.o mod_precision.o bs1e_parameter.o mod_utils-v1.o mod_bs_frb_2e.o\
-            mod_tdse_bs.o mod_tdse_bs_pop2.o v12t_method9HT.o
-OBJECTS37e = ${POBJECTS37e:.o=.o}          
-SOURCES37e = ${OBJECTS37e:.o=.f90} 
-LIBS37e    = ${LINK_LIB} ${LINK_LAPACK} ${LINK_NAG17} ${LINK_SLATEC} ${LINK_NETCDF_F} -fopenmp
-PRODUCT37e = v12t_method9HT
-##############################
+OBJECTS37  = $(patsubst %, $(SRC)/%, ${POBJECTS37})           
+SOURCES37  = ${OBJECTS37:.o=.f90} 
+LIBS37     = ${LINK_LIB} ${LINK_LAPACK} ${LINK_NAG17} ${LINK_SLATEC} ${LINK_NETCDF_F} -fopenmp
+PRODUCT37  = rd2e_double_ionisation_total
+# (parallel) (spse)
+##########################################################################################
+POBJECTS37a = mod_precision.o bs1e_parameter.o mod_utils-v1.o mod_bs_frb_2e.o \
+              mod_tdse_bs.o mod_tdse_bs_pop2.o mod_field.o rd2e_partial_wave_double_ionisation.o
+OBJECTS37a  = $(patsubst %, $(SRC)/%, ${POBJECTS37a})
+SOURCES37a  = ${OBJECTS37a:.o=.f90} 
+LIBS37a     = ${LINK_LIB} ${LINK_LAPACK} ${LINK_NAG17} ${LINK_SLATEC} ${LINK_NETCDF_F} -fopenmp
+PRODUCT37a  = rd2e_partial_wave_double_ionisation_t
+##########################################################################################
+POBJECTS37b = mod_precision.o bs1e_parameter.o mod_spherical_harmonics.o anglib.o mod_utils-v1.o mod_bs_frb_2e.o \
+              mod_tdse_bs.o mod_tdse_bs_pop2.o mod_core_phase_shift.o subtdse_bs_frb_2e_pad.o pad2e.o
+OBJECTS37b  = $(patsubst %, $(SRC)/%, ${POBJECTS37b})
+SOURCES37b  = ${OBJECTS37b:.o=.f90} 
+LIBS37b     = ${LINK_LIB} ${LINK_LAPACK} ${LINK_NAG17} ${LINK_SLATEC} ${LINK_NETCDF_F} -fopenmp
+PRODUCT37b  = pad2e
+##########################################################################################
+POBJECTS37c = mod_w2e.o mod_precision.o bs1e_parameter.o mod_utils-v1.o mod_bs_frb_2e.o \
+              mod_tdse_bs.o mod_tdse_bs_pop2.o v12t.o
+OBJECTS37c  = $(patsubst %, $(SRC)/%, ${POBJECTS37c})
+SOURCES37c  = ${OBJECTS37c:.o=.f90} 
+LIBS37c     = ${LINK_LIB} ${LINK_LAPACK} ${LINK_NAG17} ${LINK_SLATEC} ${LINK_NETCDF_F} -fopenmp
+PRODUCT37c  = Rv12t
+##########################################################################################
+POBJECTS37d = mod_w2e.o mod_precision.o bs1e_parameter.o mod_utils-v1.o mod_bs_frb_2e.o \
+              mod_tdse_bs.o mod_tdse_bs_pop2.o enlnl.o
+OBJECTS37d  = $(patsubst %, $(SRC)/%, ${POBJECTS37d})
+SOURCES37d  = ${OBJECTS37d:.o=.f90} 
+LIBS37d     = ${LINK_LIB} ${LINK_LAPACK} ${LINK_NAG17} ${LINK_SLATEC} ${LINK_NETCDF_F} -fopenmp
+PRODUCT37d  = Renlnl
+##########################################################################################
+# write a test bessel function to a file
+##########################################################################################
+POBJECTS38 = mod_precision.o bs1e_parameter.o mod_spherical_harmonics.o anglib.o mod_utils-v1.o mod_bs_frb_2e.o \
+             mod_tdse_bs.o mod_tdse_bs_pop.o bessel_print.o
+OBJECTS38  = $(patsubst %, $(SRC)/%, ${POBJECTS38})
+SOURCES38  = ${OBJECTS38:.o=.f90} 
+LIBS38     = ${LINK_LIB} ${LINK_LAPACK} ${LINK_NAG17} ${LINK_SLATEC} ${LINK_NETCDF_F} -fopenmp
+PRODUCT38  = bessel_print
+##########################################################################################
+# Seperate radial wf file for given l into individual files
+##########################################################################################
+POBJECTS38a = mod_precision.o bs1e_parameter.o mod_spherical_harmonics.o anglib.o mod_utils-v1.o mod_bs_frb_2e.o \
+              mod_tdse_bs.o mod_tdse_bs_pop.o radial_function_separator.o
+OBJECTS38a  = $(patsubst %, $(SRC)/%, ${POBJECTS38a})
+SOURCES38a  = ${OBJECTS38a:.o=.f90} 
+LIBS38a     = ${LINK_LIB} ${LINK_LAPACK} ${LINK_NAG17} ${LINK_SLATEC} ${LINK_NETCDF_F} -fopenmp
+PRODUCT38a  = radial_separator
+##########################################################################################
+POBJECTS37e = mod_w2e.o mod_precision.o bs1e_parameter.o mod_utils-v1.o mod_bs_frb_2e.o \
+              mod_tdse_bs.o mod_tdse_bs_pop2.o v12t_method9HT.o
+OBJECTS37e  = $(patsubst %, $(SRC)/%, ${POBJECTS37e})
+SOURCES37e  = ${OBJECTS37e:.o=.f90} 
+LIBS37e     = ${LINK_LIB} ${LINK_LAPACK} ${LINK_NAG17} ${LINK_SLATEC} ${LINK_NETCDF_F} -fopenmp
+PRODUCT37e  = v12t_method9HT
+##########################################################################################
 
 
+##########################################################################################
+# Define batches of executables that are created via make commands, e.g make fxd_exe
+# will compile all the executables in the fxd_exe batch for fixed boundary conditions
+##########################################################################################
 
-PROD = 1                                 \
-       2  3  4  5   6  7 8  9  10 10a       \
-       14 15 16 17 17b 18 19 20          \
-       21 22 23 24 25  26 27 28 29a 29b  \
-       30 30a 31 32 32a 33 33a 34 35 36
+PROD = 1 2 3 4 5 \
+       6 7 8 9 10 10a \
+       14 15 16 17 17b \
+       18 19 20 21 22 \
+       23 24 25 26 27 \
+       28 29a 29b 30 30a \
+       31 32 32a 33 33a \
+       34 35 36
 
+PRODUCT = ${PRODUCT1} ${PRODUCT2} ${PRODUCT3} ${PRODUCT4} ${PRODUCT4a} \
+          ${PRODUCT5} ${PRODUCT6} ${PRODUCT7} ${PRODUCT8} ${PRODUCT9} \
+          ${PRODUCT10} ${PRODUCT10a} ${PRODUCT14} ${PRODUCT15} ${PRODUCT16} \
+          ${PRODUCT17} ${PRODUCT17b} ${PRODUCT18} ${PRODUCT19} ${PRODUCT20} \
+          ${PRODUCT21} ${PRODUCT22} ${PRODUCT23} ${PRODUCT24} ${PRODUCT25} \
+          ${PRODUCT26} ${PRODUCT27} ${PRODUCT28} ${PRODUCT29a} ${PRODUCT29b}
 
-PRODUCT=${PRODUCT1}  \
-        ${PRODUCT2}  ${PRODUCT3}  ${PRODUCT4}  ${PRODUCT4a}             \
-	${PRODUCT5}  ${PRODUCT6}  ${PRODUCT7} ${PRODUCT8}  ${PRODUCT9} ${PRODUCT10} ${PRODUCT10a} \
-	${PRODUCT14} ${PRODUCT15} ${PRODUCT16}                          \
-        ${PRODUCT17} ${PRODUCT17b} 	                                \
-        ${PRODUCT18}                                                    \
-	${PRODUCT19} ${PRODUCT20} ${PRODUCT21}  ${PRODUCT22}             \
-	${PRODUCT23} ${PRODUCT24} ${PRODUCT25}  ${PRODUCT26}  \
-	${PRODUCT27} ${PRODUCT28} ${PRODUCT29a} ${PRODUCT29b} 
+# change from 3a back to 3 at some point (EDITED BY ADAM TO INCLUDE WRITING OF ALL 1e WAVFUNCTIONS ON 24/01/19)
+FXD_EXE = ${PRODUCT1} ${PRODUCT2} ${PRODUCT3a} ${PRODUCT4} ${PRODUCT4b} \
+          ${PRODUCT5} ${PRODUCT6} ${PRODUCT7} ${PRODUCT8} ${PRODUCT9} \
+          ${PRODUCT10} ${PRODUCT10a}
 
+FREE_EXE = ${PRODUCT14} ${PRODUCT15} ${PRODUCT16} ${PRODUCT17} ${PRODUCT17b} \
+           ${PRODUCT18} ${PRODUCT19} ${PRODUCT20}
 
-#\ ${PRODUCT4a} 
-#change from 3a back to 3 at some point (EDITED BY ADAM TO INCLUDE WRITING OF ALL 1e WAVFUNCTIONS ON 24/01/19)
-FXD_EXE = ${PRODUCT1}  \
-        ${PRODUCT2}  ${PRODUCT3a}  ${PRODUCT4}  ${PRODUCT4b}  \
-	${PRODUCT5}  ${PRODUCT6}  ${PRODUCT7} ${PRODUCT8}  \
-        ${PRODUCT9}  ${PRODUCT10}  ${PRODUCT10a} 
+LOPT_EXE = ${PRODUCT21} ${PRODUCT22} ${PRODUCT23} ${PRODUCT24} ${PRODUCT25} \
+           ${PRODUCT26} ${PRODUCT27} ${PRODUCT28} ${PRODUCT29} ${PRODUCT29a} \
+           ${PRODUCT29b}
 
-FREE_EXE  = ${PRODUCT14}                    \
-	${PRODUCT15} ${PRODUCT16}       \
-        ${PRODUCT17} ${PRODUCT17b} 	\
-        ${PRODUCT18}                    \
-	${PRODUCT19} ${PRODUCT20} 
-
-
-LOPT_EXE  = ${PRODUCT21}  ${PRODUCT22}                             \
-	    ${PRODUCT23}  ${PRODUCT24} ${PRODUCT25} ${PRODUCT26}   \
-	    ${PRODUCT27}  ${PRODUCT28} ${PRODUCT29} ${PRODUCT29a} \
-	    ${PRODUCT29b} 
-
-
-
-
-TDSE_EXE  =${PRODUCT30}\
-	   ${PRODUCT30a}\
-	   ${PRODUCT30b}\
-	   ${PRODUCT30c} ${PRODUCT30d}\
-	   ${PRODUCT31}\
-	   ${PRODUCT32}\
-	   ${PRODUCT32a}\
-	   ${PRODUCT33}\
-	   ${PRODUCT34}\
-	   ${PRODUCT35}\
-	   ${PRODUCT36}
+TDSE_EXE = ${PRODUCT30} ${PRODUCT30a} ${PRODUCT30b} ${PRODUCT30c} ${PRODUCT30d} \
+           ${PRODUCT31} ${PRODUCT32} ${PRODUCT32a} ${PRODUCT33} ${PRODUCT34} \
+           ${PRODUCT35} ${PRODUCT36}
 
 
 free_exe: ${FREE_EXE}
@@ -586,12 +546,10 @@ ${LPRODUCT}: ${LOBJECTS}
 	mv  ${LIBNAME} ${LIB}
 #	mv  ${LIBNAME} ${AMO_LIB}
 
-#
 #${PRODUCT0}: $(OBJECTS0) 
 #	 $(CXX) $(PROFFLAG) $(CXXFLAGS) -o $(PRODUCT0) $(OBJECTS0) $(LIBS0)
 #	 cp ${PRODUCT0} ${BIN}
 #	 mv ${PRODUCT0} ${AMO_BIN}
-
 
 ${PRODUCT1}: $(OBJECTS1) 
 	 $(F90) $(PROFFLAG1) $(F90FLAGS) -o $(PRODUCT1) $(OBJECTS1) $(LIBS1) ;\
@@ -607,7 +565,6 @@ ${PRODUCT2b}: $(OBJECTS2b)
 	 mv ${PRODUCT2b} ${BIN}
 #	 mv ${PRODUCT2} ${AMO_BIN}
 
-
 ${PRODUCT3}: $(OBJECTS3) 
 	 $(F90) $(PROFFLAG3) $(F90FLAGS) -o $(PRODUCT3) $(OBJECTS3) $(LIBS3)
 	 mv ${PRODUCT3} ${BIN}
@@ -622,13 +579,13 @@ ${PRODUCT4}: $(OBJECTS4)
 	 $(F90) $(PROFFLAG4) $(F90FLAGS) -o $(PRODUCT4) $(OBJECTS4) $(LIBS4)
 	 mv ${PRODUCT4} ${BIN}
 #	 mv ${PRODUCT4} ${AMO_BIN}
-#
+
 ${PRODUCT4b}: $(OBJECTS4b) 
 	 $(F90) $(PROFFLAG4b) $(F90FLAGS) -o $(PRODUCT4b) $(OBJECTS4b) $(LIBS4b)
 	 mv ${PRODUCT4b} ${BIN}
 #	 mv ${PRODUCT4b} ${AMO_BIN}
-#
 # f90 version of 4
+
 ${PRODUCT4a}: $(OBJECTS4a) 
 	 $(F90) $(PROFFLAG4a) $(F90FLAGS) -o $(PRODUCT4a) $(OBJECTS4a) $(LIBS4a)
 	 mv ${PRODUCT4a} ${BIN}
@@ -663,8 +620,6 @@ ${PRODUCT10}: $(OBJECTS10)
 	 $(F90) $(PROFFLAG10) $(F90FLAGS) -o $(PRODUCT10) $(OBJECTS10) $(LIBS10)
 	 mv ${PRODUCT10} ${BIN}
 #	 mv ${PRODUCT10} ${AMO_BIN}
-
-
 
 ${PRODUCT10a}: $(OBJECTS10a) 
 	 $(F90) $(PROFFLAG10a) $(F90FLAGS) -o $(PRODUCT10a) $(OBJECTS10a) $(LIBS10a)
@@ -715,14 +670,9 @@ ${PRODUCT20}: $(OBJECTS20)
 #	 mv ${PRODUCT20} ${AMO_BIN}
 
 
-
-#
-#
-#               LOPT        
-#
-#
-
-
+##########################################################################################
+# LOPT        
+##########################################################################################
 
 ${PRODUCT21}: $(OBJECTS21) 
 	 $(F90) $(PROFFLAG21) $(F90FLAGS) -o $(PRODUCT21) $(OBJECTS21) $(LIBS21)
@@ -744,30 +694,25 @@ ${PRODUCT24}: $(OBJECTS24)
 	 mv ${PRODUCT24} ${BIN}
 #	 mv ${PRODUCT24} ${AMO_BIN}
 
-
 ${PRODUCT25}: $(OBJECTS25) 
 	 $(F90) $(PROFFLAG25) $(F90FLAGS) -o $(PRODUCT25) $(OBJECTS25) $(LIBS25)
 	 mv ${PRODUCT25} ${BIN}
 #	 mv ${PRODUCT25} ${AMO_BIN}
-
 
 ${PRODUCT26}: $(OBJECTS26) 
 	 $(F90) $(PROFFLAG26) $(F90FLAGS) -o $(PRODUCT26) $(OBJECTS26) $(LIBS26)
 	 mv ${PRODUCT26} ${BIN}
 #	 mv ${PRODUCT26} ${AMO_BIN}
 
-
 ${PRODUCT27}: $(OBJECTS27) 
 	 $(F90) $(PROFFLAG27) $(F90FLAGS) -o $(PRODUCT27) $(OBJECTS27) $(LIBS27)
 	 mv ${PRODUCT27} ${BIN}
 #	 mv ${PRODUCT27} ${AMO_BIN}
 
-
 ${PRODUCT28}: $(OBJECTS28) 
 	 $(F90) $(PROFFLAG28) $(F90FLAGS) -o $(PRODUCT28) $(OBJECTS28) $(LIBS28)
 	 mv ${PRODUCT28} ${BIN}
 #	 mv ${PRODUCT28} ${AMO_BIN}
-
 
 ${PRODUCT29a}: $(OBJECTS29a) 
 	 $(F90) $(PROFFLAG29a) $(F90FLAGS) -o $(PRODUCT29a) $(OBJECTS29a) $(LIBS29a)
@@ -780,31 +725,22 @@ ${PRODUCT29b}: $(OBJECTS29b)
 #	 mv ${PRODUCT29b} ${AMO_BIN}
 
 
-
-#
-#                                  tdse
-#
-
-
-
-
+##########################################################################################
+# tdse
+##########################################################################################
 
 ${PRODUCT30}: $(OBJECTS30) 
 	 $(F90) $(PROFFLAG30) $(F90FLAGS) -o $(PRODUCT30) $(OBJECTS30) $(LIBS30)
 	 mv ${PRODUCT30} ${BIN}
 #	 mv ${PRODUCT30} ${AMO_BIN}
 
-#
 # pes
-#
 ${PRODUCT30a}: $(OBJECTS30a) 
 	 $(F90) $(PROFFLAG30a) $(F90FLAGS) -o $(PRODUCT30a) $(OBJECTS30a) $(LIBS30a)
 	 mv ${PRODUCT30a} ${BIN}
 #	 mv ${PRODUCT30a} ${AMO_BIN}
 
-#
 # hhg
-#
 ${PRODUCT30b}: $(OBJECTS30b) 
 	 $(F90) $(PROFFLAG30b) $(F90FLAGS) -o $(PRODUCT30b) $(OBJECTS30b) $(LIBS30b)
 	 mv ${PRODUCT30b} ${BIN}
@@ -820,11 +756,9 @@ ${PRODUCT30d}: $(OBJECTS30d)
 	 mv ${PRODUCT30d} ${BIN}
 #	 mv ${PRODUCT30d} ${AMO_BIN}
 
-
 ${PRODUCT31}: $(OBJECTS31) 
 	 $(F90) $(PROFFLAG31) $(F90FLAGS) -o $(PRODUCT31) $(OBJECTS31) $(LIBS31) ;\
 	 mv ${PRODUCT31} ${BIN} ;\
-
 
 ${PRODUCT32}: $(OBJECTS32) 
 	 $(F90) $(PROFFLAG32) $(F90FLAGS) -o $(PRODUCT32) $(OBJECTS32) $(LIBS32)
@@ -835,7 +769,6 @@ ${PRODUCT32b}: $(OBJECTS32b)
 	 $(F90) $(PROFFLAG32b) $(F90FLAGS) -o $(PRODUCT32b) $(OBJECTS32b) $(LIBS32b)
 	 mv ${PRODUCT32b} ${BIN}
 #	 mv ${PRODUCT2b} ${AMO_BIN}
-
 
 ${PRODUCT32a}: $(OBJECTS32a) 
 	 $(F90) $(PROFFLAG32a) $(F90FLAGS) -o $(PRODUCT32a) $(OBJECTS32a) $(LIBS32a)
@@ -1064,7 +997,7 @@ cleanfree:
 
 cleanlopt:
 	rm -f *.o *.mod     \
-	for f in $(FXD_LOPT);                        \
+	for f in $(LOPT_EXE);                        \
 	do                                          \
 	(if test -e $$f; then                       \
 	(echo "Makefile:: Removing $$f" ; rm $$f ;) \
@@ -1082,14 +1015,11 @@ cleantdse:
 
 clean:  
 	rm -f ${SRC}/*.o ${SRC}/*.mod
+	rm -f ${LIB}/libbasis.a
+
 pclean:
 	rm -f ${SRC}/*.mpo ${SRC}/*.mod  
-cleanlib:
-	rm -f ${LIB}/${LIBNAME}
 
-#
-# a space is added in 
-#
 define clean_files
 #	ifeq($(wildcard $(1)),)
 #	-@echo "clean_files: $1 not present" ; 

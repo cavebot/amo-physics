@@ -115,42 +115,40 @@ install_lapack_and_openblas() {
 
 # Function to compile the Slatec library from source
 compile_slatec() {
-    local src_dir="./lib"
-    local tar_file="$src_dir/slatec.tar.gz"
-    local build_dir="$src_dir/slatec/src"
-
-    # Extract the source archive
-    echo "Extracting Slatec source files..."
-    tar -xzf "$tar_file" -C "$src_dir"
-
-    # Change to the extracted directory
-    cd "$build_dir" || { echo "Failed to change directory to $build_dir"; exit 1; }
-
-    # Compile the source files
-    echo "Compiling Slatec source files..."
-    gfortran -O2 -c *.f
-
     # Determine the OS type for conditional ar command
     local os_type=$1
 
     if [[ "$os_type" == "darwin"* ]]; then
         # Create the library archive on macOS using macOS-compatible ar commands
-        echo "Creating Slatec library archive on macOS..."
-        ar cr libslatec.a *.o
-        ranlib libslatec.a
+        echo "Installing Slatec library on macOS with macPorts..."
+        sudo port install slatec
     elif [[ "$os_type" == "linux-gnu"* ]]; then
-        # Create the library archive on Linux using the original command
-        echo "Creating Slatec library archive on Linux..."
+
+        local src_dir="./lib"
+        local tar_file="$src_dir/slatec.tar.gz"
+        local build_dir="$src_dir/slatec/src"
+
+        # Extract the source archive
+        echo "Extracting Slatec source files..."
+        tar -xzf "$tar_file" -C "$src_dir"
+
+        # Change to the extracted directory
+        cd "$build_dir" || { echo "Failed to change directory to $build_dir"; exit 1; }
+
+        # Compile the source files
+        echo "Compiling Slatec source files into a static library..."
+        gfortran -O2 -c *.f
         ar cst libslatec.a *.o
+        # Move the library archive to the lib directory
+        mv libslatec.a ../..
+        # Return to the original directory
+        cd ../.. || { echo "Failed to return to the original directory"; exit 1; }
+        rm -r slatec
+
+        echo "Slatec library compiled and moved to $src_dir"
     fi
 
-    # Move the library archive to the lib_test_compilation directory
-    mv libslatec.a ../..
-    # Return to the original directory
-    cd ../.. || { echo "Failed to return to the original directory"; exit 1; }
-    rm -r slatec
-
-    echo "Slatec library compiled and moved to $src_dir"
+   
 }
 
 # Function to compile the Nag17 library from source
@@ -160,7 +158,7 @@ compile_nag17() {
     local build_dir="$lib_dir/nag17/scripts"
 
     # Extract the source archive
-    echo "Extracting Slatec source files..."
+    echo "Extracting NAG17 source files..."
     tar -xzf "$tar_file" -C "$lib_dir"
 
     # Run the script to compile the source files
@@ -172,10 +170,17 @@ compile_nag17() {
     mv libnag.a ..
     cd ..
     rm -r nag17
+    cd ..
 }
 
 # Get the OS type
 os_type=$(get_os_type)
+
+# Compile the NAG17 library
+compile_nag17 "$os_type"
+
+# Compile the Slatec library
+compile_slatec "$os_type"
 
 # Install NetCDF based on the OS type
 install_netcdf "$os_type"
@@ -183,12 +188,8 @@ install_netcdf "$os_type"
 # Install LAPACK based on the OS type
 install_lapack_and_openblas "$os_type"
 
-# Compile the Slatec library
-# compile_slatec "$os_type"
-
-# Compile the NAG17 library
-# compile_nag17 "$os_type"
-
+#compile the libbasis.a library from the makefile
+make lib
 
 
 #  Compilation flags for LAPACK on mac OS
