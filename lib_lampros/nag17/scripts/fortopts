@@ -1,9 +1,0 @@
-#!/bin/sh
-#  Script sets some variables used by various tools
-#
-F77='gfortran'	                # name of Fortran compiler
-NOLNK='-c'	                # flag to prevent linking
-STD=  	                        # standard flags; e.g., specifying floating point device
-UNOPT=''	                # flag for no optimization
-FULLOPT='-O2'	                # flag for highest level of optimization
-LEVEL1= 	                # lowest intermediate level of optimization above UNOPT

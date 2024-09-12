@@ -1,9 +1,0 @@
-(1)edit the 'fortopts' file and define the compiler
-(2) nag17/scripts> ./compile      (makes the objects)
-(3) nag17/scripts>./bulidlib      (builds the library)
-(4) nag17/scripts>./rmobj         (rm objects)
-a file called libnag.a has been created in the 'nag17' directory
-
-#note: if  'fortopts' is not read from 'compile' script then cut and
-past the content of 'fortopts' in the start of 'compile' and comment out
-. ./fortopts.
