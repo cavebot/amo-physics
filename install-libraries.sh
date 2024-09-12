@@ -94,18 +94,15 @@ install_lapack_and_openblas() {
             echo "Failed to install LAPACK on Linux."
             exit 1
         fi
-    
-            # Verify this copilot suggestion
 
         # Install OpenBLAS using apt-get
-        # sudo apt-get install -y libopenblas-dev
-        # if [ $? -eq 0 ]; then
-        #     echo "OpenBLAS installed successfully on Linux."
-        # else
-        #     echo "Failed to install OpenBLAS on Linux."
-        #     exit 1
-        # fi
-
+        sudo apt-get install -y libopenblas-dev
+        if [ $? -eq 0 ]; then
+            echo "OpenBLAS installed successfully on Linux."
+        else
+            echo "Failed to install OpenBLAS on Linux."
+            exit 1
+        fi
 
     else
         echo "Unsupported operating system: $os_type"
@@ -147,8 +144,6 @@ compile_slatec() {
 
         echo "Slatec library compiled and moved to $src_dir"
     fi
-
-   
 }
 
 # Function to compile the Nag17 library from source
@@ -176,8 +171,13 @@ compile_nag17() {
 # Get the OS type
 os_type=$(get_os_type)
 
-# Compile the NAG17 library
-compile_nag17 "$os_type"
+# Check if libnag.a already exists
+if [ ! -f "./lib/libnag.a" ]; then
+    # Compile the NAG17 library
+    compile_nag17 "$os_type"
+else
+    echo "libnag.a already exists. Skipping NAG17 compilation."
+fi
 
 # Compile the Slatec library
 compile_slatec "$os_type"
@@ -188,10 +188,14 @@ install_netcdf "$os_type"
 # Install LAPACK based on the OS type
 install_lapack_and_openblas "$os_type"
 
-#compile the libbasis.a library from the makefile
-make lib
+# Check if libbasis.a already exists
+if [ ! -f "./lib/libbasis.a" ]; then
+    # Compile the libbasis.a library from the makefile
+    make lib
+else
+    echo "libbasis.a already exists. Skipping libbasis.a compilation."
+fi
 
-
-#  Compilation flags for LAPACK on mac OS
-#  LDFLAGS="-L/opt/homebrew/opt/lapack/lib"
-#  CPPFLAGS="-I/opt/homebrew/opt/lapack/include"
+# Compilation flags for LAPACK on macOS
+# LDFLAGS="-L/opt/homebrew/opt/lapack/lib"
+# CPPFLAGS="-I/opt/homebrew/opt/lapack/include"
