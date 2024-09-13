@@ -3,3 +3,4 @@
 *.a
 *.o
 *.mod
+.DS_Store
