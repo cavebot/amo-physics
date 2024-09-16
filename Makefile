@@ -1016,7 +1016,7 @@ cleantdse:
 clean:  
 	rm -f ${SRC}/*.o ${SRC}/*.mod
 	rm -f ${LIB}/libbasis.a
-	rm -f ${LIB}/libnag.a
+	# rm -f ${LIB}/libnag.a
 
 pclean:
 	rm -f ${SRC}/*.mpo ${SRC}/*.mod  

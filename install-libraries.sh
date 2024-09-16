@@ -168,10 +168,15 @@ compile_nag17() {
     cd ..
 }
 
-# Get the OS type
+
+#################################################################
+# MAIN SCRIPT STARTS HERE #######################################
+#################################################################
+
+# Get the OS type 
 os_type=$(get_os_type)
 
-# Check if libnag.a already exists
+# Check if libnag.a already exists ######################
 if [ ! -f "./lib/libnag.a" ]; then
     # Compile the NAG17 library
     compile_nag17 "$os_type"
@@ -179,13 +184,13 @@ else
     echo "libnag.a already exists. Skipping NAG17 compilation."
 fi
 
-# Compile the Slatec library
+# Compile the Slatec library #####################
 compile_slatec "$os_type"
 
-# Install NetCDF based on the OS type
+# Install NetCDF based on the OS type ###########
 install_netcdf "$os_type"
 
-# Install LAPACK based on the OS type
+# Install LAPACK based on the OS type ###########
 install_lapack_and_openblas "$os_type"
 
 # Check if libbasis.a already exists
