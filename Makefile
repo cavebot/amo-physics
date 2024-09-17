@@ -969,64 +969,55 @@ info:
 
 
 cleanbin:
-	for f in $(PRODUCT);                       \
-	do                                         \
-	(if test -e $$f; then                       \
-	(echo "Makefile:: Removing $$f" ; rm $$f ;) \
-	fi;)                                        \
+	for f in $(PRODUCT); do \
+		if test -e ${BIN}/$$f; then \
+			echo "Makefile:: Removing $$f"; \
+			rm ${BIN}/$$f; \
+		fi; \
 	done
 
 cleanfxd:
-	rm -f *.o *.mod \
-	for f in $(FXD_EXE);                        \
-	do                                          \
-	(if test -e $$f; then                       \
-	(echo "Makefile:: Removing $$f" ; rm $$f ;) \
-	fi;)                                        \
+	for f in $(FXD_EXE); do \
+		if test -e ${BIN}/$$f; then \
+			echo "Makefile:: Removing $$f"; \
+			rm ${BIN}/$$f; \
+		fi; \
 	done
 
 cleanfree:
-	rm -f *.o *.mod     \
-	rm -f *.o *.mod \
-	for f in $(FXD_EXE);                        \
-	do                                          \
-	(if test -e $$f; then                       \
-	(echo "Makefile:: Removing $$f" ; rm $$f ;) \
-	fi;)                                        \
+	for f in ${BIN}/$(FXD_EXE); do \
+		if test -e $$f; then \
+			echo "Makefile:: Removing $$f"; \
+			rm $$f; \
+		fi; \
 	done
 
 cleanlopt:
-	rm -f *.o *.mod     \
-	for f in $(LOPT_EXE);                        \
-	do                                          \
-	(if test -e $$f; then                       \
-	(echo "Makefile:: Removing $$f" ; rm $$f ;) \
-	fi;)                                        \
+	for f in $(LOPT_EXE); do \
+		if test -e ${BIN}/$$f; then \
+			echo "Makefile:: Removing $$f"; \
+			rm ${BIN}/$$f; \
+		fi; \
 	done
 
 cleantdse:
-	@$(foreach f,$(TDSE_EXE), $(call clean_files, $(f)))
-#	$(foreach f,$(TDSE_EXE), rm ${BIN}/$(f);)
-#	rm -f *.o *.mod     \
-#	for f in $(TDSE_EXE); do \
-	echo $$f
-#	done
-#	if test -e ${BIN}/$$f; then (echo "Makefile:: Removing $$f" ; rm ${BIN}/$$f)  fi ; \
+	for f in $(TDSE_EXE); do \
+		if test -e ${BIN}/$$f; then \
+			echo "Makefile:: Removing $$f"; \
+			rm ${BIN}/$$f; \
+		fi; \
+	done
 
-clean:  
+clean:
 	rm -f ${SRC}/*.o ${SRC}/*.mod
 	rm -f ${LIB}/libbasis.a
 	# rm -f ${LIB}/libnag.a
 
-pclean:
-	rm -f ${SRC}/*.mpo ${SRC}/*.mod  
+cleanlib:
+	rm -f ${LIB}/${LIBNAME}
 
-define clean_files
-#	ifeq($(wildcard $(1)),)
-#	-@echo "clean_files: $1 not present" ; 
-	$(shell ls "${BIN}/$1")
-#	else
-#	(shell ls ${BIN}/$1) 
-#-@echo "clean_files: $1 removed"
-###	endif	
-endef	
+pclean:
+	rm -f ${SRC}/*.mpo ${SRC}/*.mod
+
+
+
