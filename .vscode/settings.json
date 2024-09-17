@@ -1,14 +1,3 @@
 {
     "makefile.configureOnOpen": false,
-    "fortran-intellisense.includePaths": [
-        "${workspaceFolder}/include",
-        "/path/to/netcdf/include",
-        "/usr/include",
-        "/usr/local/include"
-    ],
-    "fortran-intellisense.compilerPath": "/usr/bin/gfortran",  // or path to your Fortran compiler
-    "code-runner.executorMap": {
-        "fortran": "gfortran -o ${fileDirname}/${fileBasenameNoExtension} ${file} && ${fileDirname}/${fileBasenameNoExtension}"
-    },
-    "fortran
 }

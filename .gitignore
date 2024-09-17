@@ -1,7 +1,8 @@
-.vscode/
+.vscode/*
 .sfdx/
 *.a
 *.o
 *.mod
 .DS_Store
 bin/
+.vscode/settings.json
