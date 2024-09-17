@@ -12,9 +12,11 @@ echo '#                                   exe dir = ' $3
 echo '# in h1e.inp must set first_spline = 0.'
 echo '# in h1e.inp must set  last_spline = 0.'
 
-print "running h1e.scr \n";
-
 sbin=$3
+
+mkdir -p dat
+mkdir -p out
+mkdir -p log
 
 L=$1
 while [ $L -le $2 ] 

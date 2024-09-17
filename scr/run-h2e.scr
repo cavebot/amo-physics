@@ -13,7 +13,7 @@ sbin=$2
 
 echo 'Rv2eb  L= ' $1
 
-$sbin/Rv2eb $1            > out/v2e.L$1.out
+$sbin/Rv2eb $1            #> out/v2e.L$1.out
 
 echo 'Rh2eb  l= ' $1
 
