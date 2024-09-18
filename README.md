@@ -124,8 +124,12 @@ Ensure the following libraries are installed on your system:
 5. **Set up symbolic links for execution**:
    - Navigate to the `run/{quantum_system}/{specific_run_folder}` directory and create a symbolic link to the `bin` folder:
      ```bash
-     cd ./run/he/asd/
-     ln -s ../../../bin (this command might vary depending on OS and how many levels directories deep into the run folder you are executing your runs from)
+     # These commands can vary depending on how many directories deep into the run folder you are executing want to execute your runs from
+     # The assumption is that you will run simulations from ./run/{helium_or_qdot}/{specific_run_folder}, so 2 levels deeper into ./run
+     # It should not matter where you run from once you create symbolic links back to ./bin and ./scr (hopefully, if the codebase isn't too flawed)
+     cd ./run/he/{run_name(anything)}
+     ln -s ../../../bin 
+     ln -s ../../../scr
      ```
 
 ---

@@ -1,0 +1,13 @@
+no                              # ATI (YES) CS or withour ATI (NO)
+1                               # Initial state principal quantum number(n)
+0                               # Initial state orbital quantum number (l)
+0                               # Initial state magnetic quantum number (m)
+0                               # polarisation (0:lin,1:circ+,-1:circ-)
+0.01                            # WMin and WMax. Cross-sections are calculated
+5                               # for photon energies in between.
+4.D0                            # Epsilon lower boundary (times the state density )
+20.D0                           # Epsilon upper boundary
+1                               # Number of Epsilon values.
+####################################################################################
+icsNph.f/csNph.f
+
