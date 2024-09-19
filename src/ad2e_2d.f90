@@ -69,8 +69,6 @@ program ad2e_test
     real(DPK), dimension(:,:), allocatable :: k_value !delta_kl array for phase shift values
     integer :: ki, R1, R2, l2,k2, j, av
     integer :: reduced_ijmax, k !only energies up to roughly n=40 have valid calculated radial functions. Use this instead.
-    integer :: k1_select, k2_select k_val
-
 
     pi = 4.D0*DATAN(1.D0)
 

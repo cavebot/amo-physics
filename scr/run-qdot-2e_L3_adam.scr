@@ -44,25 +44,25 @@ bin/Rncf 0 2 v $n2e
 #bin/Rtdse_bs
 
 
-mkdir -p    run-b$beta
+# mkdir -p    run-b$beta
 
-cp -r scr   run-b$beta/
+# cp -r scr   run-b$beta/
 
-mv out      run-b$beta/
-mv log      run-b$beta/
-mv dat      run-b$beta/
-cp -r  inp  run-b$beta/
+# mv out      run-b$beta/
+# mv log      run-b$beta/
+# mv dat      run-b$beta/
+# cp -r  inp  run-b$beta/
 
-mv tout     run-b$beta/
-mv tdat     run-b$beta/
+# mv tout     run-b$beta/
+# mv tdat     run-b$beta/
 
-#...... tdse
-mkdir -p    out
-mkdir -p    dat
-mkdir -p    log
-mkdir -p    tout
-mkdir -p    tdat
-cp -r tinp  run-b$beta/
+# #...... tdse
+# mkdir -p    out
+# mkdir -p    dat
+# mkdir -p    log
+# mkdir -p    tout
+# mkdir -p    tdat
+# cp -r tinp  run-b$beta/
 
 
 # readme:    
