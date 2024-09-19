@@ -1,5 +1,5 @@
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
-MODULE param
+MODULE bs1e_param
   !
   USE PRECISION, ONLY : DPK
   USE io, only:ninp
@@ -275,6 +275,6 @@ CONTAINS
 
   END SUBROUTINE input
 
-END MODULE param
+END MODULE bs1e_param
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

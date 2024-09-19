@@ -17,7 +17,7 @@
 
 PROGRAM H1E
 
-  USE param
+  USE BS1E_param
   USE set_grid
   USE one_e_matrix
   USE DATA, ONLY: write_mx, write_v_mx, write_v

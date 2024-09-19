@@ -162,7 +162,7 @@ CONTAINS
     MODULE set_grid
       !
       USE PRECISION, ONLY:dpk
-      USE param
+      USE bs1e_param
       USE UNITS,    ONLY:M_PI
       !
       IMPLICIT NONE
@@ -337,7 +337,7 @@ CONTAINS
 MODULE potentials
   !
   USE PRECISION, ONLY:dpk
-  USE param
+  USE bs1e_param
   !
   PUBLIC v1e
   !  RRIVATE v_h, v_morse, v_he, v_hn, v_model
@@ -348,7 +348,7 @@ CONTAINS
 !
   SUBROUTINE COREWF(c, ns, p, f, r, dr, t, npo, n, k, ni, nf, h)
     !
-    USE param
+    USE bs1e_param
     !
     IMPLICIT NONE
 
@@ -452,7 +452,7 @@ CONTAINS
 !
   SUBROUTINE init_hydrogenic_orbitals(pr,r)
     !
-    use param
+    use bs1e_param
     !
     IMPLICIT NONE
     !
@@ -660,7 +660,7 @@ CONTAINS
                 ! coulomb (hydrogenic ~ -Z/r)
   REAL(dpk) FUNCTION v_h(x, l)
     !
-    USE param                  !, ONLY:znuc
+    USE bs1e_param                  !, ONLY:znuc
     USE units, ONLY:m_pi
     !
     IMPLICIT NONE
@@ -802,8 +802,8 @@ CONTAINS
   REAL(dpk) FUNCTION v_qdot(x)
     !
     !
-    USE param, ONLY: ap
-!    USE param, ONLY: rc
+    USE bs1e_param, ONLY: ap
+!    USE bs1e_param, ONLY: rc
     !
     IMPLICIT NONE
     !
@@ -832,7 +832,7 @@ CONTAINS
 
   REAL(dpk) FUNCTION v_well(x)
     !
-    USE param, ONLY: ap
+    USE bs1e_param, ONLY: ap
     !
     IMPLICIT NONE
     !
@@ -870,7 +870,7 @@ END MODULE potentials
 
 MODULE one_e_matrix
 
-  USE param,      ONLY: dpk, nb, kb, rmax, rs, idbsp, znuc, nrp, xi
+  USE bs1e_param,      ONLY: dpk, nb, kb, rmax, rs, idbsp, znuc, nrp, xi
   USE potentials, ONLY: v1e
   USE units,      only:m_pi
   IMPLICIT NONE
@@ -1210,7 +1210,7 @@ END FUNCTION f
 
 SUBROUTINE setmat(n, lang, a, b, t)
   !
-  USE param
+  USE bs1e_param
   USE UTILS,      ONLY : print_mx
   !    USE bspline_sub_module
   !
@@ -1433,7 +1433,7 @@ END SUBROUTINE SETMAT
   !
   SUBROUTINE bsp_integral_f(n, t, mx_b, f, p, n_der, i_system)
     !
-    USE param
+    USE bs1e_param
     IMPLICIT NONE
     !
     INTEGER                             :: n
@@ -1564,7 +1564,7 @@ END SUBROUTINE SETMAT
   !
   SUBROUTINE bsp_dipole( n, d, t)
     !
-    USE param
+    USE bs1e_param
     USE UTILS,      ONLY : print_mx
     !
     IMPLICIT NONE
@@ -1651,7 +1651,7 @@ END SUBROUTINE SETMAT
   !
   SUBROUTINE bsp_integral( n, d, t, deriv, q)
     !MOD!
-    USE param
+    USE bs1e_param
     USE UTILS,      ONLY : print_mx
     !PAR!
     IMPLICIT NONE
@@ -1783,7 +1783,7 @@ END SUBROUTINE SETMAT
   !
   SUBROUTINE bsp_overlap(fx, b, cb)
     !
-    USE param
+    USE bs1e_param
     !
     IMPLICIT NONE
     INTEGER                                 :: n

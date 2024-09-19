@@ -186,7 +186,7 @@ SUBROUTINE WRITE_V(L, V, FILENAME)
 
   !  use precision,  only : DPK
   use UTILS,      only : ASCIIFILE
-  use PARAM,      only : nb, nbs, ncs
+  use BS1E_PARAM,      only : nb, nbs, ncs
 
 
   implicit none
@@ -227,7 +227,7 @@ SUBROUTINE READ_V(L, V, FILENAME)
 
   !  use precision,  only : DPK
   use UTILS,      only : ASCIIFILE
-  use PARAM,      only : nb, nbs, ncs
+  use BS1E_PARAM,      only : nb, nbs, ncs
 
 
   implicit none

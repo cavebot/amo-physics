@@ -15,7 +15,7 @@ CONTAINS
   !.......................
   SUBROUTINE WRITE_WF1E(nplot, l, en, ce)
       !
-     USE param
+     USE BS1E_param
      USE set_grid
      USE one_e_matrix
      USE utils, ONLY: datafile
@@ -175,7 +175,7 @@ CONTAINS
 !
    SUBROUTINE WRITE_ALL_WF1E_ADAM(nplot, l, en, ce)
      !
-     USE param
+     USE BS1E_param
      USE set_grid
      USE one_e_matrix
      USE utils, ONLY: datafile
@@ -266,7 +266,7 @@ CONTAINS
    !
    SUBROUTINE WRITE_LOPT_WF1E(nplot, l, en, ce)
      !
-     USE param
+     USE BS1E_param
      USE set_grid
      USE one_e_matrix
      USE utils, ONLY: datafile
@@ -1486,7 +1486,7 @@ CONTAINS
     !
     SUBROUTINE WRITE_FX(L, CE, CEF)
 
-      USE param
+      USE BS1E_param
       USE set_grid
       USE one_e_matrix
       USE utils,       ONLY: asciifile
@@ -1553,7 +1553,7 @@ CONTAINS
     !
     SUBROUTINE WRITE_FX_COMPLEX(l, tm, en, cet, ce)
 
-      USE param
+      USE BS1E_param
       USE set_grid
       USE one_e_matrix
       USE utils,                 ONLY: asciifile
@@ -1706,7 +1706,7 @@ CONTAINS
     !
     SUBROUTINE get_fn_boundary(ix, ce, fn_b)
 
-      USE param
+      USE BS1E_param
       USE set_grid
       USE one_e_matrix
       USE utils,                 ONLY: asciifile
@@ -1754,7 +1754,7 @@ CONTAINS
     !
     SUBROUTINE evaluate_fn_at(ri, t, ce, fn_b)
 
-      USE param
+      USE BS1E_param
       USE set_grid
       USE one_e_matrix
       USE utils,                 ONLY: asciifile
@@ -1805,7 +1805,7 @@ CONTAINS
 !
     SUBROUTINE get_fn_boundary_matrix(ce, mx_lb)
 
-      USE param
+      USE BS1E_param
       USE set_grid
       USE one_e_matrix
       USE utils,                 ONLY: asciifile
@@ -1865,7 +1865,7 @@ CONTAINS
 
     SUBROUTINE WRITE_FX_BSP(CEF)
 
-     USE param
+     USE BS1E_param
      USE set_grid
      USE one_e_matrix
      USE functions,   ONLY:fx_gauss_real
@@ -1923,7 +1923,7 @@ CONTAINS
     !
     SUBROUTINE WRITE_FX_COMPLEX_LEAPFROG(IT, TM, EN, CE, CE_T)
       !
-      USE param
+      USE BS1E_param
       USE set_grid
       USE one_e_matrix
       USE utils,        ONLY: asciifile

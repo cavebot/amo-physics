@@ -1,4 +1,4 @@
-
+#!/bin/sh
 #
 #
 # run as:   ./scr/run-qdot-2e $1 $2
@@ -21,16 +21,22 @@ mkdir -p  dat
 mkdir -p  tdat
 
 bin/Rbspci2e -v 5.0 -zn $beta -rb 60.0 -nb 62
-bin/run-h1e-adam.scr 0 7 bin
-bin/run-h2e.scr 0 bin
-bin/run-h2e.scr 1 bin
-bin/run-h2e.scr 2 bin
-bin/run-h2e.scr 3 bin
 
+echo $beta $n2e
 
-bin/run-d2e.scr 0 1 $n2e v he bin
-bin/run-d2e.scr 1 2 $n2e v he bin
-bin/run-d2e.scr 2 3 $n2e v he bin
+#Script to run the 1-e TISE B-spline basis solver for l=0-7 
+scr/run-h1e-adam.scr 0 7 bin
+
+#Script to run the 2-e TISE B-spline basis solver for L=0-3
+scr/run-h2e.scr 0 bin
+scr/run-h2e.scr 1 bin
+scr/run-h2e.scr 2 bin
+scr/run-h2e.scr 3 bin
+
+# Script to run the Dipole Matric Element calculations for L01, L12, L23 in velocity gauge
+scr/run-d2e.scr 0 1 $n2e v he bin
+scr/run-d2e.scr 1 2 $n2e v he bin
+scr/run-d2e.scr 2 3 $n2e v he bin
 
 #.... tdse
 bin/Rncf 0 2 v $n2e 
@@ -38,12 +44,10 @@ bin/Rncf 0 2 v $n2e
 #bin/Rtdse_bs
 
 
-
 mkdir -p    run-b$beta
 
 cp -r scr   run-b$beta/
 
-#..... se
 mv out      run-b$beta/
 mv log      run-b$beta/
 mv dat      run-b$beta/
@@ -61,10 +65,6 @@ mkdir -p    tdat
 cp -r tinp  run-b$beta/
 
 
-
-echo time > run-b$1
-#
-#
 # readme:    
 #        - in the parameters file setting nl=5 will result to crash
 #            when the cfg files include l1e = 4 and above.

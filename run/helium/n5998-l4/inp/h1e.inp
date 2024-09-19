@@ -1,5 +1,5 @@
-         2.0000        1.00000          # zn, mass
-h            0.00000   0.00000          # model potential, ap, rc
+        0.20000        1.00000          # zn, mass
+qdot         5.00000   0.00000          # model potential, ap, rc
              62              9          # nb, kb
  0.120E-07  60.00000      2000          # rmin, rb, no
          1 0.100E-04         0          # grid (0=sin,1=lin), rs = first non-zero point)(sine)
@@ -11,4 +11,3 @@ h            0.00000   0.00000          # model potential, ap, rc
 #
 #  input file for running bsci2e program
 #
-

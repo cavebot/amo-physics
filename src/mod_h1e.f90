@@ -13,7 +13,7 @@ CONTAINS
   
 !  USE nag_f77_f_chapter
     USE PRECISION,  ONLY : DPK
-    USE PARAM,      ONLY : KB, NDIM
+    USE BS1E_PARAM,      ONLY : KB, NDIM
     USE UTILS,      ONLY : print_mx
     !......................
 
@@ -126,7 +126,7 @@ CONTAINS
     !S
     SUBROUTINE ENERGY_SPECTRUM(l, en, mode)
       !
-      USE param
+      USE BS1E_param
       USE DATA, ONLY: write_v
       !
       IMPLICIT NONE

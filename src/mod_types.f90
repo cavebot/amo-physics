@@ -84,8 +84,8 @@ CONTAINS
 
   SUBROUTINE init_basis(this)
     !
-    USE PARAM,        ONLY: nb, kb, idbsp, rmax   
-    USE PARAM,        ONLY: input                 ! read
+    USE BS1E_PARAM,        ONLY: nb, kb, idbsp, rmax   
+    USE BS1E_PARAM,        ONLY: input                 ! read
     USE one_e_matrix, ONLY: mkgrid 
     !
     IMPLICIT NONE

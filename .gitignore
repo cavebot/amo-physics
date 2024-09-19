@@ -6,3 +6,7 @@
 .DS_Store
 bin/
 .vscode/settings.json
+*.dat
+*.out
+*.log
+*.nc

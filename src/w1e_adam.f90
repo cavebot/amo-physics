@@ -33,7 +33,7 @@
 
 PROGRAM wf1e
 
-  USE param,        only: nl
+  USE BS1E_param,        only: nl
   USE PRECISION,    ONLY: dpk
   USE DATA,         ONLY: read_mx, read_mx_p, read_v_mx, write_mx, read_v
   USE wf_1e_adam,        ONLY: read_wf1e, write_wf1e, write_lopt_wf1e, write_all_wf1e_adam, save_wf1e_nl, write_fx, write_fx_bsp
